@@ -17,6 +17,20 @@ interface Journey {
   sort_order: number;
 }
 
+const PRESET_IMAGES = [
+  { label: "-- Select an existing photo --", url: "" },
+  { label: "Elephant (/images/elephant.jpg)", url: "/images/elephant.jpg" },
+  { label: "Leopard (/images/leopard.jpg)", url: "/images/leopard.jpg" },
+  { label: "Lion (/images/lion.jpg)", url: "/images/lion.jpg" },
+  { label: "Western Ghats Valley (/images/frame1.jpg)", url: "/images/frame1.jpg" },
+  { label: "Bandipur Explorer (/images/frcam_hero.jpg)", url: "/images/frcam_hero.jpg" },
+  { label: "Forest Stream (/images/fr_cam_1.jpg)", url: "/images/fr_cam_1.jpg" },
+  { label: "Alert Leopard Brush (/images/fr_cam_2.jpg)", url: "/images/fr_cam_2.jpg" },
+  { label: "Savanna Sunset (/images/fr_cam_3.jpg)", url: "/images/fr_cam_3.jpg" },
+  { label: "Deciduous Canopy (/images/fr_cam_4.jpg)", url: "/images/fr_cam_4.jpg" },
+  { label: "Highland Grasslands (/images/fr_cam_5.jpg)", url: "/images/fr_cam_5.jpg" },
+];
+
 const AdminJourneys = () => {
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [editing, setEditing] = useState<Journey | null>(null);
@@ -59,10 +73,10 @@ const AdminJourneys = () => {
 
       if (editing) {
         await supabase.from("journeys").update(payload).eq("id", editing.id);
-        toast({ title: "Journey updated" });
+        toast({ title: "Adventure updated" });
       } else {
         await supabase.from("journeys").insert(payload);
-        toast({ title: "Journey created" });
+        toast({ title: "Adventure created" });
       }
       setEditing(null);
       setForm({ title: "", description: "", date: "", cover_image_url: "" });
@@ -75,15 +89,21 @@ const AdminJourneys = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this journey?")) return;
+    if (!confirm("Delete this adventure location?")) return;
     await supabase.from("journeys").delete().eq("id", id);
-    toast({ title: "Journey deleted" });
+    toast({ title: "Adventure deleted" });
     fetchJourneys();
   };
 
   const startEdit = (j: Journey) => {
     setEditing(j);
     setForm({ title: j.title, description: j.description || "", date: j.date || "", cover_image_url: j.cover_image_url || "" });
+    setImageFile(null);
+  };
+
+  const clearImage = () => {
+    setForm({ ...form, cover_image_url: "" });
+    setImageFile(null);
   };
 
   return (
@@ -108,17 +128,68 @@ const AdminJourneys = () => {
             <Label>Date</Label>
             <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="mt-1" />
           </div>
-          <div>
-            <Label>Cover Image</Label>
-            <Input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} className="mt-1" />
-            {form.cover_image_url && !imageFile && (
-              <img src={form.cover_image_url} alt="Cover" className="mt-2 h-24 rounded" />
+          
+          <div className="space-y-3 pt-2 border-t border-border">
+            <Label className="font-semibold text-sm">Cover Image Settings</Label>
+            
+            <div>
+              <Label className="text-xs text-muted-foreground">Select from existing project photos:</Label>
+              <select
+                value={form.cover_image_url}
+                onChange={(e) => {
+                  setForm({ ...form, cover_image_url: e.target.value });
+                  setImageFile(null);
+                }}
+                className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
+              >
+                {PRESET_IMAGES.map((p, idx) => (
+                  <option key={idx} value={p.url}>{p.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">Or Upload a new image file:</Label>
+              <Input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} className="mt-1" />
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">Or Enter custom Image URL:</Label>
+              <Input
+                type="text"
+                placeholder="https://... or /images/filename.jpg"
+                value={form.cover_image_url}
+                onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })}
+                className="mt-1 font-mono text-xs"
+              />
+            </div>
+
+            {(form.cover_image_url || imageFile) && (
+              <div className="flex items-center gap-4 pt-2 bg-muted/40 p-3 rounded border border-border">
+                <div className="w-20 h-20 rounded overflow-hidden bg-black flex-shrink-0 border border-white/10">
+                  <img
+                    src={imageFile ? URL.createObjectURL(imageFile) : form.cover_image_url}
+                    alt="Cover Preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="space-y-1 flex-1">
+                  <span className="text-xs font-semibold block text-foreground">Current Selection Preview</span>
+                  <p className="text-[10px] text-muted-foreground truncate max-w-md">
+                    {imageFile ? `New upload file: ${imageFile.name}` : form.cover_image_url}
+                  </p>
+                  <Button type="button" variant="outline" size="sm" onClick={clearImage} className="text-xs h-7 text-destructive border-destructive/30 hover:bg-destructive/10">
+                    <Trash2 size={12} className="mr-1" /> Remove Image
+                  </Button>
+                </div>
+              </div>
             )}
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex gap-2 pt-2">
             <Button type="submit" disabled={loading}>{editing ? "Update" : "Add"} Adventure</Button>
             {editing && (
-              <Button type="button" variant="outline" onClick={() => { setEditing(null); setForm({ title: "", description: "", date: "", cover_image_url: "" }); }}>
+              <Button type="button" variant="outline" onClick={() => { setEditing(null); setForm({ title: "", description: "", date: "", cover_image_url: "" }); setImageFile(null); }}>
                 Cancel
               </Button>
             )}
