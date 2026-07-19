@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Camera, BookOpen, Book, Frame, CalendarDays, LogOut, Image, LayoutTemplate } from "lucide-react";
+import { Camera, BookOpen, Book, Frame, CalendarDays, LogOut, Image, LayoutTemplate, Compass } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 
 const adminSections = [
   { label: "Hero Settings", icon: LayoutTemplate, to: "/admin/hero" },
   { label: "Home Gallery", icon: Image, to: "/admin/home-gallery" },
-  { label: "Journeys", icon: Camera, to: "/admin/journeys" },
+  { label: "Adventures & Journeys", icon: Compass, to: "/admin/journeys" },
   { label: "Blog Posts", icon: BookOpen, to: "/admin/blog" },
   { label: "Books", icon: Book, to: "/admin/books" },
   { label: "Frames", icon: Frame, to: "/admin/frames" },

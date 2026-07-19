@@ -92,10 +92,10 @@ const AdminJourneys = () => {
         <Link to="/admin" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary mb-6">
           <ArrowLeft size={14} /> Back to Dashboard
         </Link>
-        <h1 className="font-display text-3xl font-bold text-foreground mb-8">Manage Journeys</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground mb-8">Manage Adventures & Journeys</h1>
 
         <form onSubmit={handleSubmit} className="bg-card border border-border rounded-lg p-6 mb-8 space-y-4">
-          <h2 className="font-display text-lg font-semibold text-foreground">{editing ? "Edit Journey" : "Add Journey"}</h2>
+          <h2 className="font-display text-lg font-semibold text-foreground">{editing ? "Edit Adventure" : "Add Adventure"}</h2>
           <div>
             <Label>Title</Label>
             <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required className="mt-1" />
@@ -116,7 +116,7 @@ const AdminJourneys = () => {
             )}
           </div>
           <div className="flex gap-2">
-            <Button type="submit" disabled={loading}>{editing ? "Update" : "Add"} Journey</Button>
+            <Button type="submit" disabled={loading}>{editing ? "Update" : "Add"} Adventure</Button>
             {editing && (
               <Button type="button" variant="outline" onClick={() => { setEditing(null); setForm({ title: "", description: "", date: "", cover_image_url: "" }); }}>
                 Cancel
