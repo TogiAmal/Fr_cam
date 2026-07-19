@@ -7,17 +7,17 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 const fallbackAdventures = [
-  { id: 1, title: "Western Ghats Expedition", cover: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80", description: "Exploring the dense rainforest biodiversity." },
-  { id: 2, title: "Kabini Tiger Trails", cover: "https://images.unsplash.com/photo-1535338454528-1b22dc446882?w=600&q=80", description: "Tracking the big cats of Kabini." },
-  { id: 3, title: "African Savanna Safaris", cover: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=600&q=80", description: "Witnessing the great wild migration." },
-  { id: 4, title: "Bandipur National Park", cover: "https://images.unsplash.com/photo-1604176354204-9268737828e4?w=600&q=80", description: "Tracking Tigers and Elephants in the deciduous forests of Karnataka." },
-  { id: 5, title: "Eravikulam National Park", cover: "https://images.unsplash.com/photo-1595815729819-bf9c51f70552?w=600&q=80", description: "High-altitude shola-grassland ecosystem, home to the endangered Nilgiri Tahr." },
-  { id: 6, title: "Kaziranga National Park", cover: "https://images.unsplash.com/photo-1528127269322-539801943592?w=600&q=80", description: "Exploring the floodplains of Assam, home to the great Indian one-horned rhinoceros." },
-  { id: 7, title: "Masai Mara National Park", cover: "https://images.unsplash.com/photo-1547721064-da6cfb341d50?w=600&q=80", description: "Capturing the epic Great Migration and big cats across the iconic African savanna." },
-  { id: 8, title: "Mudumalai National Park", cover: "https://images.unsplash.com/photo-1581888227599-779811939961?w=600&q=80", description: "A sanctuary of diverse wildlife, old deciduous trees, and massive elephant herds." },
-  { id: 9, title: "Nagarhole National Park", cover: "https://images.unsplash.com/photo-1602491453979-53a99888c3a1?w=600&q=80", description: "Dense jungle streams and rich wildlife, sanctuary of the Asiatic elephant and leopard." },
-  { id: 10, title: "Periyar National Park", cover: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=600&q=80", description: "Scenic boat safaris and wildlife tracking around the pristine artificial lake." },
-  { id: 11, title: "Parambikulam Tiger Reserve", cover: "https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?w=600&q=80", description: "Untouched bamboo groves and teak plantations sheltering diverse fauna and flora." }
+  { id: 1, title: "Western Ghats Expedition", cover: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=95", description: "Exploring the dense rainforest biodiversity." },
+  { id: 2, title: "Kabini Tiger Trails", cover: "https://images.unsplash.com/photo-1535338454528-1b22dc446882?w=1200&q=95", description: "Tracking the big cats of Kabini." },
+  { id: 3, title: "African Savanna Safaris", cover: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&q=95", description: "Witnessing the great wild migration." },
+  { id: 4, title: "Bandipur National Park", cover: "https://images.unsplash.com/photo-1604176354204-9268737828e4?w=1200&q=95", description: "Tracking Tigers and Elephants in the deciduous forests of Karnataka." },
+  { id: 5, title: "Eravikulam National Park", cover: "https://images.unsplash.com/photo-1595815729819-bf9c51f70552?w=1200&q=95", description: "High-altitude shola-grassland ecosystem, home to the endangered Nilgiri Tahr." },
+  { id: 6, title: "Kaziranga National Park", cover: "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200&q=95", description: "Exploring the floodplains of Assam, home to the great Indian one-horned rhinoceros." },
+  { id: 7, title: "Masai Mara National Park", cover: "https://images.unsplash.com/photo-1547721064-da6cfb341d50?w=1200&q=95", description: "Capturing the epic Great Migration and big cats across the iconic African savanna." },
+  { id: 8, title: "Mudumalai National Park", cover: "https://images.unsplash.com/photo-1581888227599-779811939961?w=1200&q=95", description: "A sanctuary of diverse wildlife, old deciduous trees, and massive elephant herds." },
+  { id: 9, title: "Nagarhole National Park", cover: "https://images.unsplash.com/photo-1602491453979-53a99888c3a1?w=1200&q=95", description: "Dense jungle streams and rich wildlife, sanctuary of the Asiatic elephant and leopard." },
+  { id: 10, title: "Periyar National Park", cover: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1200&q=95", description: "Scenic boat safaris and wildlife tracking around the pristine artificial lake." },
+  { id: 11, title: "Parambikulam Tiger Reserve", cover: "https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?w=1200&q=95", description: "Untouched bamboo groves and teak plantations sheltering diverse fauna and flora." }
 ];
 
 const Adventure = () => {

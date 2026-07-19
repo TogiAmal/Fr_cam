@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 import { Frame } from "lucide-react";
 
 const frames = [
-  { id: 1, title: "Golden Sunset Egret", image: "https://images.unsplash.com/photo-1557401620-67270b4a4e1e?w=500&q=80", size: '18" × 24"', price: "₹8,500" },
-  { id: 2, title: "Misty Morning Deer", image: "https://images.unsplash.com/photo-1484406566174-437a054e96e1?w=500&q=80", size: '24" × 36"', price: "₹12,000" },
-  { id: 3, title: "Kingfisher Dive", image: "https://images.unsplash.com/photo-1579380656108-f98e4df8ea62?w=500&q=80", size: '16" × 20"', price: "₹6,500" },
-  { id: 4, title: "Elephant at Dusk", image: "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=500&q=80", size: '24" × 36"', price: "₹14,000" },
-  { id: 5, title: "Hornbill Portrait", image: "https://images.unsplash.com/photo-1452570053594-1b985d6ea890?w=500&q=80", size: '12" × 16"', price: "₹5,000" },
-  { id: 6, title: "Leopard Gaze", image: "https://images.unsplash.com/photo-1456926631375-92c8ce872def?w=500&q=80", size: '20" × 30"', price: "₹15,000" },
+  { id: 1, title: "Golden Sunset Egret", image: "https://images.unsplash.com/photo-1557401620-67270b4a4e1e?w=1200&q=95", size: '18" × 24"', price: "₹8,500" },
+  { id: 2, title: "Misty Morning Deer", image: "https://images.unsplash.com/photo-1484406566174-437a054e96e1?w=1200&q=95", size: '24" × 36"', price: "₹12,000" },
+  { id: 3, title: "Kingfisher Dive", image: "https://images.unsplash.com/photo-1579380656108-f98e4df8ea62?w=1200&q=95", size: '16" × 20"', price: "₹6,500" },
+  { id: 4, title: "Elephant at Dusk", image: "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=1200&q=95", size: '24" × 36"', price: "₹14,000" },
+  { id: 5, title: "Hornbill Portrait", image: "https://images.unsplash.com/photo-1452570053594-1b985d6ea890?w=1200&q=95", size: '12" × 16"', price: "₹5,000" },
+  { id: 6, title: "Leopard Gaze", image: "https://images.unsplash.com/photo-1456926631375-92c8ce872def?w=1200&q=95", size: '20" × 30"', price: "₹15,000" },
 ];
 
 const whatsappBase = "https://wa.me/919876543210?text=";

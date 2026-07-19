@@ -13,7 +13,7 @@ const AboutSection = () => {
         >
           <div className="aspect-[3/4] md:aspect-[4/5] max-h-[50vh] md:max-h-[60vh] rounded-lg overflow-hidden border-2 border-primary/20 mx-auto">
             <img
-              src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=600&q=80"
+              src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=1600&q=95"
               alt="Fr. Jose Poyyaniyil"
               className="w-full h-full object-cover"
             />

@@ -5,9 +5,9 @@ import { Folder, Image as ImageIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const defaultJourneys = [
-  { id: "1", title: "Western Ghats", cover_image_url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80", description: "Western Ghats Rainforest Expedition" },
-  { id: "2", title: "Kabini Wilderness", cover_image_url: "https://images.unsplash.com/photo-1535338454528-1b22dc446882?w=600&q=80", description: "Tigers and leopards of Kabini rivers" },
-  { id: "3", title: "African Savanna", cover_image_url: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=600&q=80", description: "Wild migration and grasslands" },
+  { id: "1", title: "Western Ghats", cover_image_url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=95", description: "Western Ghats Rainforest Expedition" },
+  { id: "2", title: "Kabini Wilderness", cover_image_url: "https://images.unsplash.com/photo-1535338454528-1b22dc446882?w=1200&q=95", description: "Tigers and leopards of Kabini rivers" },
+  { id: "3", title: "African Savanna", cover_image_url: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&q=95", description: "Wild migration and grasslands" },
 ];
 
 const GalleryFolders = () => {

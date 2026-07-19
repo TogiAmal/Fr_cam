@@ -178,7 +178,7 @@ const HomeGallery = () => {
             <img
               src={photo.image_url}
               alt={photo.caption || "Featured wildlife photo"}
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              className="w-full h-full object-contain bg-[#070707] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               draggable={false}
             />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
@@ -228,13 +228,13 @@ const HomeGallery = () => {
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="relative max-w-full max-h-[85vh] flex flex-col items-center justify-center"
+              className="relative max-w-full max-h-[92vh] flex flex-col items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={photos[lightboxIndex].image_url}
                 alt={photos[lightboxIndex].caption || "Wildlife photo"}
-                className="max-w-full max-h-[75vh] object-contain rounded shadow-2xl border border-white/5"
+                className="max-w-full max-h-[85vh] object-contain rounded shadow-2xl border border-white/5"
               />
               {photos[lightboxIndex].caption && (
                 <p className="text-white/80 font-body text-xs tracking-wider uppercase mt-4 text-center px-4 max-w-lg">

@@ -249,13 +249,13 @@ const Gallery = () => {
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="relative max-w-full max-h-[85vh] flex flex-col items-center justify-center"
+              className="relative max-w-full max-h-[92vh] flex flex-col items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={filteredPhotos[lightboxIndex].image_url}
                 alt={filteredPhotos[lightboxIndex].caption || "Wildlife photo"}
-                className="max-w-full max-h-[75vh] object-contain rounded shadow-2xl border border-white/5"
+                className="max-w-full max-h-[85vh] object-contain rounded shadow-2xl border border-white/5"
               />
               {filteredPhotos[lightboxIndex].caption && (
                 <p className="text-white/80 font-body text-xs tracking-wider uppercase mt-4 text-center px-4 max-w-lg">

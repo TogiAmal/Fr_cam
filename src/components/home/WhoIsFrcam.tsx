@@ -185,13 +185,13 @@ const WhoIsFrcam = () => {
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="relative max-w-full max-h-[85vh] flex flex-col items-center justify-center"
+              className="relative max-w-full max-h-[92vh] flex flex-col items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={carouselImages[activeIndex]}
                 alt={`Fr. Jose Poyyaniyil image ${activeIndex + 1}`}
-                className="max-w-full max-h-[75vh] object-contain rounded shadow-2xl border border-white/5"
+                className="max-w-full max-h-[85vh] object-contain rounded shadow-2xl border border-white/5"
               />
               <div className="text-white/40 font-mono text-[10px] tracking-widest mt-4">
                 {activeIndex + 1} / {carouselImages.length}

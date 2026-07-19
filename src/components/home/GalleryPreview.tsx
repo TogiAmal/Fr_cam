@@ -7,19 +7,19 @@ const placeholderJourneys = [
   {
     id: 1,
     title: "Western Ghats",
-    cover: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80",
+    cover: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=95",
     photoCount: 48,
   },
   {
     id: 2,
     title: "Kabini Wilderness",
-    cover: "https://images.unsplash.com/photo-1535338454528-1b22dc446882?w=600&q=80",
+    cover: "https://images.unsplash.com/photo-1535338454528-1b22dc446882?w=1200&q=95",
     photoCount: 36,
   },
   {
     id: 3,
     title: "Sundarbans",
-    cover: "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=600&q=80",
+    cover: "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=1200&q=95",
     photoCount: 52,
   },
 ];
