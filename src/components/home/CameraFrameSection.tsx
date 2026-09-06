@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const CameraFrameSection = () => {
   return (
-    <section id="camera-viewfinder" className="py-24 px-6 md:px-12 bg-black text-white w-full border-t border-white/5 overflow-hidden">
+    <section id="camera-viewfinder" className="py-24 px-6 md:px-12 bg-background text-foreground w-full border-t border-border overflow-hidden">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -10,13 +10,13 @@ const CameraFrameSection = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <span className="font-body text-xs uppercase tracking-[0.25em] text-white/50 block mb-2">
+          <span className="font-body text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-2">
             View Through the Lens
           </span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-widest text-white">
+          <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-widest text-foreground">
             Focus Finder
           </h2>
-          <div className="w-12 h-[1px] bg-white/30 mx-auto mt-4" />
+          <div className="w-12 h-[1px] bg-border mx-auto mt-4" />
         </motion.div>
 
         {/* Viewfinder frame container */}
@@ -25,7 +25,7 @@ const CameraFrameSection = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="relative aspect-video w-full rounded-lg overflow-hidden border border-white/20 bg-neutral-950 shadow-2xl group"
+          className="relative aspect-video w-full rounded-lg overflow-hidden border border-border bg-card shadow-2xl group"
         >
           {/* Main Elephant/Frame Image inside */}
           <img

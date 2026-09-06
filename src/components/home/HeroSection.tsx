@@ -66,7 +66,7 @@ const HeroSection = () => {
           }}
         />
       </AnimatePresence>
-      <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/10 to-background z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/25 z-0" />
 
       {/* Right-aligned Welcome text container */}
       <div className="relative z-10 text-right px-6 md:px-16 max-w-2xl flex flex-col items-end justify-center">

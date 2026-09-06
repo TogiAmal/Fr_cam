@@ -1,27 +1,86 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Maximize2, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
-const carouselImages = [
-  "/images/fr_cam_5.jpg",
-  "/images/fr_cam_hood.jpg",
-  "/images/fr_cam_3.jpg",
-  "/images/fr_cam_4.jpg"
+const DEFAULT_PHOTOS = [
+  { id: "1", image_url: "/images/fr_cam_5.jpg", zoom: 100, offsetY: 0, offsetX: 0, paddingTop: 0 },
+  { id: "2", image_url: "/images/fr_cam_hood.jpg", zoom: 100, offsetY: 0, offsetX: 0, paddingTop: 0 },
+  { id: "3", image_url: "/images/fr_cam_3.jpg", zoom: 100, offsetY: 0, offsetX: 0, paddingTop: 0 },
+  { id: "4", image_url: "/images/fr_cam_4.jpg", zoom: 100, offsetY: 0, offsetX: 0, paddingTop: 0 }
 ];
 
 const WhoIsFrcam = () => {
+  const [photos, setPhotos] = useState<any[]>(DEFAULT_PHOTOS);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handlePrev = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setActiveIndex((prev) => (prev - 1 + carouselImages.length) % carouselImages.length);
+    setActiveIndex((prev) => (prev - 1 + photos.length) % photos.length);
   };
 
   const handleNext = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setActiveIndex((prev) => (prev + 1) % carouselImages.length);
+    setActiveIndex((prev) => (prev + 1) % photos.length);
   };
+
+  useEffect(() => {
+    const fetchWhoIsFrcamPhotos = async () => {
+      try {
+        const { data: journey } = await supabase
+          .from("journeys")
+          .select("id")
+          .eq("title", "Who is fr_cam")
+          .maybeSingle();
+
+        if (journey) {
+          const { data: photosData } = await supabase
+            .from("journey_photos")
+            .select("*")
+            .eq("journey_id", journey.id)
+            .order("sort_order", { ascending: true });
+
+          if (photosData && photosData.length > 0) {
+            const mapped = photosData.map((p) => {
+              let zoom = 100;
+              let offsetY = 0;
+              let offsetX = 0;
+              let paddingTop = 0;
+
+              if (p.caption) {
+                try {
+                  const config = JSON.parse(p.caption);
+                  zoom = typeof config.zoom === "number" ? config.zoom : 100;
+                  offsetY = typeof config.offsetY === "number" ? config.offsetY : 0;
+                  offsetX = typeof config.offsetX === "number" ? config.offsetX : 0;
+                  paddingTop = typeof config.paddingTop === "number" ? config.paddingTop : 0;
+                } catch (e) {
+                  // Not JSON
+                }
+              }
+
+              return {
+                id: p.id,
+                image_url: p.image_url,
+                zoom,
+                offsetY,
+                offsetX,
+                paddingTop
+              };
+            });
+            setPhotos(mapped);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching who is fr_cam photos:", err);
+      }
+    };
+
+    fetchWhoIsFrcamPhotos();
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -33,10 +92,10 @@ const WhoIsFrcam = () => {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isExpanded]);
+  }, [isExpanded, photos]);
 
   return (
-    <section id="who-is-frcam" className="py-24 px-6 md:px-12 bg-black text-white w-full border-t border-white/5">
+    <section id="who-is-frcam" className="py-24 px-6 md:px-12 bg-background text-foreground w-full border-t border-border">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
         {/* Left Column: Text description */}
         <motion.div
@@ -46,19 +105,29 @@ const WhoIsFrcam = () => {
           transition={{ duration: 0.8 }}
           className="lg:col-span-2 space-y-6"
         >
-          <span className="font-body text-xs uppercase tracking-[0.25em] text-white/50 block">
+          <span className="font-body text-xs uppercase tracking-[0.25em] text-muted-foreground block">
             The Photographer
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-widest text-white leading-tight">
-            Who is <br /><span className="italic font-normal lowercase font-serif text-white/40">fr_cam</span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-widest text-foreground leading-tight">
+            Who is <br /><span className="italic font-normal lowercase font-serif text-muted-foreground/60">fr_cam</span>
           </h2>
-          <div className="w-16 h-[1px] bg-white/30 my-4" />
+          <div className="w-16 h-[1px] bg-border my-4" />
           <p className="font-body text-sm leading-relaxed text-muted-foreground">
             Fr_cam is the photography signature of Fr. Jose Poyyaniyil, an explorer and priest who travels deep into remote forests and wildlife reserves to capture authentic moments in nature.
           </p>
           <p className="font-body text-sm leading-relaxed text-muted-foreground">
             His camera focuses on highlighting the wild beauty, silent strength, and grace of ecosystems ranging from the Western Ghats rainforests to the plains of Africa. By freezing these moments, he aims to inspire wildlife conservation and deep appreciation for creation.
           </p>
+          <p className="font-body text-sm leading-relaxed text-muted-foreground">
+            In addition to his photography prints, Fr. Jose shares his experiences and visual stories through his published books. These coffee table books compile breathtaking captures, narratives, and insights from his travels, making them a perfect companion for nature and art lovers.
+          </p>
+          <div className="pt-2">
+            <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground uppercase tracking-widest text-[10px] font-semibold">
+              <Link to="/books">
+                View Books
+              </Link>
+            </Button>
+          </div>
         </motion.div>
 
         {/* Right Column: Single image with click-to-expand and Instagram link */}
@@ -73,18 +142,22 @@ const WhoIsFrcam = () => {
           <div className="w-full max-w-[360px] flex flex-col items-center">
             <div
               onClick={() => setIsExpanded(true)}
-              className="relative w-full aspect-[3/4] rounded-lg overflow-hidden border border-white/10 bg-neutral-950 flex items-center justify-center shadow-2xl cursor-pointer group"
+              className="relative w-full aspect-[3/4] rounded-lg overflow-hidden border border-border bg-card flex items-center justify-center shadow-2xl cursor-pointer group"
+              style={{ paddingTop: `${photos[activeIndex]?.paddingTop || 0}px` }}
             >
               <AnimatePresence mode="wait">
                 <motion.img
                   key={activeIndex}
-                  src={carouselImages[activeIndex]}
+                  src={photos[activeIndex]?.image_url}
                   alt={`Fr. Jose Poyyaniyil image ${activeIndex + 1}`}
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.3 }}
-                  className="w-full h-full object-contain p-2"
+                  className="w-full h-full object-cover"
+                  style={{
+                    transform: `scale(${(photos[activeIndex]?.zoom || 100) / 100}) translate(${(photos[activeIndex]?.offsetX || 0)}px, ${(photos[activeIndex]?.offsetY || 0)}px)`
+                  }}
                 />
               </AnimatePresence>
               
@@ -96,8 +169,8 @@ const WhoIsFrcam = () => {
               </div>
 
               {/* Number pagination counter */}
-              <div className="absolute top-4 left-4 bg-black/60 text-[10px] tracking-widest uppercase px-2.5 py-1 rounded font-mono border border-white/5">
-                {activeIndex + 1} / {carouselImages.length}
+              <div className="absolute top-4 left-4 bg-black/60 text-[10px] tracking-widest uppercase px-2.5 py-1 rounded font-mono border border-white/5 text-white">
+                {activeIndex + 1} / {photos.length}
               </div>
             </div>
 
@@ -107,14 +180,14 @@ const WhoIsFrcam = () => {
               <div className="flex gap-4">
                 <button
                   onClick={handlePrev}
-                  className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all bg-neutral-900/50 hover:bg-neutral-900 active:scale-95"
+                  className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-all bg-card/50 hover:bg-card active:scale-95"
                   aria-label="Previous image"
                 >
                   <ArrowLeft size={18} />
                 </button>
                 <button
                   onClick={handleNext}
-                  className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-all bg-neutral-900/50 hover:bg-neutral-900 active:scale-95"
+                  className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-all bg-card/50 hover:bg-card active:scale-95"
                   aria-label="Next image"
                 >
                   <ArrowRight size={18} />
@@ -126,7 +199,7 @@ const WhoIsFrcam = () => {
                 href="https://www.instagram.com/fr_cam/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white/40 hover:text-white transition-colors text-xs uppercase tracking-[0.2em] font-semibold group"
+                className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-xs uppercase tracking-[0.2em] font-semibold group"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +211,7 @@ const WhoIsFrcam = () => {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-white/30 group-hover:text-white transition-colors"
+                  className="text-muted-foreground/60 group-hover:text-foreground transition-colors"
                 >
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
@@ -179,7 +252,7 @@ const WhoIsFrcam = () => {
               <ChevronLeft size={36} />
             </button>
 
-            {/* Expanded Image */}
+            {/* Expanded Image Container with same framing aspect ratio */}
             <motion.div
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
@@ -188,13 +261,21 @@ const WhoIsFrcam = () => {
               className="relative max-w-full max-h-[92vh] flex flex-col items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
-                src={carouselImages[activeIndex]}
-                alt={`Fr. Jose Poyyaniyil image ${activeIndex + 1}`}
-                className="max-w-full max-h-[85vh] object-contain rounded shadow-2xl border border-white/5"
-              />
+              <div
+                className="relative aspect-[3/4] w-[85vw] max-w-[420px] rounded-lg overflow-hidden border border-white/10 bg-black flex items-center justify-center shadow-2xl"
+                style={{ paddingTop: `${photos[activeIndex]?.paddingTop || 0}px` }}
+              >
+                <img
+                  src={photos[activeIndex]?.image_url}
+                  alt={`Fr. Jose Poyyaniyil image ${activeIndex + 1}`}
+                  className="w-full h-full object-cover"
+                  style={{
+                    transform: `scale(${(photos[activeIndex]?.zoom || 100) / 100}) translate(${(photos[activeIndex]?.offsetX || 0)}px, ${(photos[activeIndex]?.offsetY || 0)}px)`
+                  }}
+                />
+              </div>
               <div className="text-white/40 font-mono text-[10px] tracking-widest mt-4">
-                {activeIndex + 1} / {carouselImages.length}
+                {activeIndex + 1} / {photos.length}
               </div>
             </motion.div>
 

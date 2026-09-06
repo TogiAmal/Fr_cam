@@ -13,6 +13,36 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address first to reset your password.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/admin/login`,
+    });
+    setLoading(false);
+
+    if (error) {
+      toast({
+        title: "Reset Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Reset Email Sent",
+        description: "A password reset link has been sent to your email address.",
+      });
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -64,7 +94,16 @@ const AdminLogin = () => {
             <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="mt-1" />
           </div>
           <div>
-            <Label htmlFor="password" className="font-body">Password</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="font-body">Password</Label>
+              <button 
+                type="button" 
+                onClick={handleForgotPassword}
+                className="text-xs text-primary hover:underline font-body bg-transparent border-0 cursor-pointer"
+              >
+                Forgot password?
+              </button>
+            </div>
             <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="mt-1" />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>

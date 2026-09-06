@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/home/HeroSection";
 import WhoIsFrcam from "@/components/home/WhoIsFrcam";
-import HomeGallery from "@/components/home/HomeGallery";
+import GalleryFolders from "@/components/home/GalleryFolders";
 import CameraFrameSection from "@/components/home/CameraFrameSection";
 import ProductFrameSection from "@/components/home/ProductFrameSection";
 
@@ -17,8 +17,8 @@ const Index = () => {
       {/* Section 2: Who is fr_cam with horizontal image carousel */}
       <WhoIsFrcam />
 
-      {/* Section 3: Direct scrolling Home Gallery */}
-      <HomeGallery />
+      {/* Section 3: Gallery Folders */}
+      <GalleryFolders />
 
       {/* Section 4: Camera Viewfinder with frame1.jpg */}
       <CameraFrameSection />

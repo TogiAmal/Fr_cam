@@ -1,12 +1,14 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Mail, MessageSquare, Phone, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import React, { useState } from "react";
+import { SOCIAL_LINKS } from "@/config/social";
+import { InstagramIcon, WhatsAppIcon } from "@/components/icons/SocialIcons";
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -50,18 +52,43 @@ const Contact = () => {
                 Fr. Jose Poyyaniyil
               </h2>
               <p className="font-body text-sm leading-relaxed text-muted-foreground">
-                Feel free to send a message or contact directly for licensing images, booking photo tours/workshops, or inquiries about canvas prints.
+                Feel free to send a message or contact directly for licensing images, booking photo tours/workshops, or inquiries about canvas prints and books.
               </p>
               <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-card">
-                    <Phone className="text-white" size={18} />
+                <a
+                  href={SOCIAL_LINKS.getWhatsAppLink("Hi Fr. Jose, I am reaching out from your website.")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 group"
+                >
+                  <div className="w-10 h-10 rounded-full border border-[#25D366]/30 flex items-center justify-center bg-[#25D366]/10 text-[#25D366] group-hover:scale-105 transition-transform">
+                    <WhatsAppIcon size={20} />
                   </div>
                   <div>
-                    <h4 className="font-display text-xs uppercase tracking-wider text-white">Call / WhatsApp</h4>
-                    <p className="font-body text-sm text-muted-foreground">+91 98765 43210</p>
+                    <h4 className="font-display text-xs uppercase tracking-wider text-white flex items-center gap-2">
+                      WhatsApp Business Chat <span className="text-[10px] text-[#25D366] font-normal">(Click to chat)</span>
+                    </h4>
+                    <p className="font-body text-sm text-muted-foreground">Direct Business Inquiry</p>
                   </div>
-                </div>
+                </a>
+
+                <a
+                  href={SOCIAL_LINKS.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 group"
+                >
+                  <div className="w-10 h-10 rounded-full border border-pink-500/30 flex items-center justify-center bg-pink-500/10 text-pink-400 group-hover:scale-105 transition-transform">
+                    <InstagramIcon size={20} />
+                  </div>
+                  <div>
+                    <h4 className="font-display text-xs uppercase tracking-wider text-white flex items-center gap-2">
+                      Instagram Profile <span className="text-[10px] text-pink-400 font-normal">@fr_cam</span>
+                    </h4>
+                    <p className="font-body text-sm text-muted-foreground">Follow latest wildlife updates</p>
+                  </div>
+                </a>
+
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-card">
                     <Mail className="text-white" size={18} />

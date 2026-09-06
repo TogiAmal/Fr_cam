@@ -2,9 +2,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Send } from "lucide-react";
-import { Link } from "react-router-dom";
+import { BookOpen, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { SOCIAL_LINKS } from "@/config/social";
 
 const fallbackBooks = [
   {
@@ -126,24 +126,15 @@ const Books = () => {
                   </p>
 
                   <div className="pt-4 flex flex-wrap gap-4 justify-center md:justify-start">
-                    {book.purchase_link ? (
-                      <a
-                        href={book.purchase_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 border border-white text-white uppercase tracking-widest text-xs font-semibold hover:bg-white hover:text-black transition-colors duration-300 rounded-sm"
-                      >
-                        Acquire Copy
-                      </a>
-                    ) : (
-                      <Link
-                        to="/contact"
-                        className="inline-flex items-center gap-2 px-6 py-3 border border-gold/40 text-gold hover:border-gold hover:bg-gold hover:text-black uppercase tracking-widest text-xs font-semibold transition-all duration-300 rounded-sm bg-gold/5"
-                      >
-                        <Send size={12} />
-                        Inquire for Copy
-                      </Link>
-                    )}
+                    <a
+                      href={book.purchase_link || SOCIAL_LINKS.getBookInquiryLink(book.title)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 border border-[#25D366]/40 text-[#25D366] hover:border-[#25D366] hover:bg-[#25D366] hover:text-black uppercase tracking-widest text-xs font-semibold transition-all duration-300 rounded-sm bg-[#25D366]/10"
+                    >
+                      <MessageCircle size={14} />
+                      Inquire & Buy via WhatsApp
+                    </a>
                   </div>
                 </div>
               </motion.div>

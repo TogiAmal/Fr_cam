@@ -13,6 +13,7 @@ const adminSections = [
   { label: "Books", icon: Book, to: "/admin/books" },
   { label: "Frames", icon: Frame, to: "/admin/frames" },
   { label: "Events", icon: CalendarDays, to: "/admin/events" },
+  { label: "Who is fr_cam", icon: Camera, to: "/admin/who-is-frcam" },
 ];
 
 const Admin = () => {

@@ -22,6 +22,9 @@ import AdminBooks from "./pages/admin/AdminBooks.tsx";
 import AdminFrames from "./pages/admin/AdminFrames.tsx";
 import AdminEvents from "./pages/admin/AdminEvents.tsx";
 import AdminHomeGallery from "./pages/admin/AdminHomeGallery.tsx";
+import AdminWhoIsFrcam from "./pages/admin/AdminWhoIsFrcam.tsx";
+
+import FloatingSocialButtons from "./components/FloatingSocialButtons.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +33,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <FloatingSocialButtons />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -50,6 +54,7 @@ const App = () => (
           <Route path="/admin/books" element={<AdminBooks />} />
           <Route path="/admin/frames" element={<AdminFrames />} />
           <Route path="/admin/events" element={<AdminEvents />} />
+          <Route path="/admin/who-is-frcam" element={<AdminWhoIsFrcam />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

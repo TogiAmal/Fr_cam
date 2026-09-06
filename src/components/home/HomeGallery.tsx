@@ -123,7 +123,7 @@ const HomeGallery = () => {
   }, [lightboxIndex, photos]);
 
   return (
-    <section id="gallery" className="py-24 bg-black text-white w-full border-t border-white/5 relative group/section">
+    <section id="gallery" className="py-24 bg-background text-foreground w-full border-t border-border relative group/section">
       <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -131,27 +131,27 @@ const HomeGallery = () => {
           viewport={{ once: true }}
           className="text-center"
         >
-          <span className="font-body text-xs uppercase tracking-[0.25em] text-white/50 block mb-2">
+          <span className="font-body text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-2">
             Featured Captures
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-widest text-white">
+          <h2 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-widest text-foreground">
             Gallery
           </h2>
-          <div className="w-12 h-[1px] bg-white/30 mx-auto mt-4" />
+          <div className="w-12 h-[1px] bg-border mx-auto mt-4" />
         </motion.div>
       </div>
 
       {/* Navigation Buttons */}
       <button
         onClick={() => scrollByAmount("left")}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-black/60 hover:bg-white hover:text-black border border-white/10 rounded-full flex items-center justify-center text-white transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-card/70 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex"
       >
         <ChevronLeft size={24} />
       </button>
 
       <button
         onClick={() => scrollByAmount("right")}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-black/60 hover:bg-white hover:text-black border border-white/10 rounded-full flex items-center justify-center text-white transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-card/70 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex"
       >
         <ChevronRight size={24} />
       </button>
@@ -172,13 +172,13 @@ const HomeGallery = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="flex-shrink-0 h-[300px] md:h-[450px] aspect-[4/3] rounded overflow-hidden border border-white/5 bg-neutral-900 group relative cursor-pointer snap-start"
+            className="flex-shrink-0 h-[300px] md:h-[450px] aspect-[4/3] rounded overflow-hidden border border-border bg-card group relative cursor-pointer snap-start"
             onClick={() => openLightbox(index)}
           >
             <img
               src={photo.image_url}
               alt={photo.caption || "Featured wildlife photo"}
-              className="w-full h-full object-contain bg-[#070707] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              className="w-full h-full object-contain bg-card transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               draggable={false}
             />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">

@@ -112,19 +112,27 @@ const JourneyGallery = () => {
   }, [lightboxIndex, photos]);
 
   return (
-    <div className="min-h-screen bg-black text-white font-body">
+    <div className="min-h-screen bg-background text-foreground font-body">
       <Navbar />
       
       <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <Link
-          to="/gallery"
-          className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-[0.2em] mb-12 border border-white/10 rounded px-4 py-2 hover:bg-white/5"
-        >
-          <ArrowLeft size={14} /> Back to Gallery
-        </Link>
+        <div className="flex flex-wrap gap-4 mb-12">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-xs uppercase tracking-[0.2em] border border-border rounded px-4 py-2 hover:bg-secondary/40"
+          >
+            <ArrowLeft size={14} /> Back to Home
+          </Link>
+          <Link
+            to="/gallery"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-xs uppercase tracking-[0.2em] border border-border rounded px-4 py-2 hover:bg-secondary/40"
+          >
+            Back to Gallery
+          </Link>
+        </div>
 
         {loading ? (
-          <p className="text-center text-white/40 animate-pulse mt-12">Loading gallery...</p>
+          <p className="text-center text-muted-foreground/60 animate-pulse mt-12">Loading gallery...</p>
         ) : (
           <>
             <motion.div
@@ -132,25 +140,25 @@ const JourneyGallery = () => {
               animate={{ opacity: 1, y: 0 }}
               className="mb-16 text-center md:text-left"
             >
-              <span className="font-body text-xs uppercase tracking-[0.25em] text-white/50 block mb-2">
+              <span className="font-body text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-2">
                 Journey Collection
               </span>
-              <h1 className="font-serif italic text-4xl md:text-5xl font-normal lowercase tracking-wide flex items-center justify-center md:justify-start gap-3">
-                <Camera className="text-white/40" size={32} />
+              <h1 className="font-serif italic text-4xl md:text-5xl font-normal lowercase tracking-wide flex items-center justify-center md:justify-start gap-3 text-foreground">
+                <Camera className="text-muted-foreground/60" size={32} />
                 {journey?.title || "Collection"}
               </h1>
               {journey?.description && (
-                <p className="text-white/65 mt-4 max-w-2xl text-sm leading-relaxed font-body">
+                <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-relaxed font-body">
                   {journey.description}
                 </p>
               )}
-              <div className="w-12 h-[1px] bg-white/30 mt-6 mx-auto md:mx-0" />
+              <div className="w-12 h-[1px] bg-border mt-6 mx-auto md:mx-0" />
             </motion.div>
 
             {photos.length === 0 ? (
-              <div className="text-center py-20 bg-neutral-950 border border-white/5 rounded-lg">
-                <Camera className="mx-auto text-white/20 mb-4" size={48} />
-                <p className="text-white/40 text-lg">No photos have been uploaded to this collection yet.</p>
+              <div className="text-center py-20 bg-card border border-border rounded-lg">
+                <Camera className="mx-auto text-muted-foreground/40 mb-4" size={48} />
+                <p className="text-muted-foreground text-lg">No photos have been uploaded to this collection yet.</p>
               </div>
             ) : (
               <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
@@ -160,7 +168,7 @@ const JourneyGallery = () => {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.05 }}
-                    className="break-inside-avoid overflow-hidden rounded border border-white/5 bg-neutral-950 group relative cursor-pointer mb-6"
+                    className="break-inside-avoid overflow-hidden rounded border border-border bg-card group relative cursor-pointer mb-6"
                     onClick={() => openLightbox(i)}
                   >
                     <img

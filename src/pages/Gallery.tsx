@@ -129,33 +129,33 @@ const Gallery = () => {
   }, [lightboxIndex, filteredPhotos]);
 
   return (
-    <div className="min-h-screen bg-black text-white font-body">
+    <div className="min-h-screen bg-background text-foreground font-body">
       <Navbar />
       
       <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Title Block */}
         <div className="text-center mb-16">
-          <span className="font-body text-xs uppercase tracking-[0.25em] text-white/50 block mb-2">
+          <span className="font-body text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-2">
             Showcase Portfolio
           </span>
-          <h1 className="font-serif italic text-5xl md:text-6xl text-white font-normal lowercase tracking-wide flex items-center justify-center gap-3">
-            <Camera className="text-white/40" size={32} />
+          <h1 className="font-serif italic text-5xl md:text-6xl text-foreground font-normal lowercase tracking-wide flex items-center justify-center gap-3">
+            <Camera className="text-muted-foreground/60" size={32} />
             gallery
           </h1>
-          <div className="w-12 h-[1px] bg-white/30 mx-auto mt-4" />
+          <div className="w-12 h-[1px] bg-border mx-auto mt-4" />
         </div>
 
         {/* Tab Filters */}
-        <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-16 border-b border-white/5 pb-6">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-16 border-b border-border pb-6">
           <button
             onClick={() => setSelectedJourneyId("all")}
             className={`font-body text-[10px] md:text-xs uppercase tracking-[0.2em] pb-2 transition-all relative ${
-              selectedJourneyId === "all" ? "text-white font-bold" : "text-white/40 hover:text-white/80"
+              selectedJourneyId === "all" ? "text-foreground font-bold" : "text-muted-foreground hover:text-foreground"
             }`}
           >
             All
             {selectedJourneyId === "all" && (
-              <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-[1px] bg-white" />
+              <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-[1px] bg-primary" />
             )}
           </button>
           {journeys.map((j) => (
@@ -163,12 +163,12 @@ const Gallery = () => {
               key={j.id}
               onClick={() => setSelectedJourneyId(j.id)}
               className={`font-body text-[10px] md:text-xs uppercase tracking-[0.2em] pb-2 transition-all relative ${
-                selectedJourneyId === j.id ? "text-white font-bold" : "text-white/40 hover:text-white/80"
+                selectedJourneyId === j.id ? "text-foreground font-bold" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {j.title}
               {selectedJourneyId === j.id && (
-                <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-[1px] bg-white" />
+                <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-[1px] bg-primary" />
               )}
             </button>
           ))}
@@ -176,9 +176,9 @@ const Gallery = () => {
 
         {/* Masonry Grid */}
         {filteredPhotos.length === 0 ? (
-          <div className="text-center py-20 bg-neutral-950 border border-white/5 rounded-lg">
-            <Camera className="mx-auto text-white/20 mb-4" size={48} />
-            <p className="text-white/40 text-lg">No photos found in this category.</p>
+          <div className="text-center py-20 bg-card border border-border rounded-lg">
+            <Camera className="mx-auto text-muted-foreground/40 mb-4" size={48} />
+            <p className="text-muted-foreground text-lg">No photos found in this category.</p>
           </div>
         ) : (
           <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
@@ -191,7 +191,7 @@ const Gallery = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.4 }}
-                  className="break-inside-avoid overflow-hidden rounded border border-white/5 bg-neutral-950 group relative cursor-pointer mb-6"
+                  className="break-inside-avoid overflow-hidden rounded border border-border bg-card group relative cursor-pointer mb-6"
                   onClick={() => openLightbox(index)}
                 >
                   <img
