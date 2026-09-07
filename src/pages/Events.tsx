@@ -31,7 +31,7 @@ const Events = () => {
           <div className="text-center mb-12">
             <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-3">
               <CalendarDays className="inline mr-3 text-primary" size={36} />
-              Events
+              Upcoming Events
             </h1>
             <p className="font-body text-muted-foreground">Upcoming workshops, exhibitions & expeditions</p>
           </div>

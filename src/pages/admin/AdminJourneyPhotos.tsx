@@ -34,7 +34,7 @@ const AdminJourneyPhotos = () => {
     const [photos, setPhotos] = useState<Photo[]>([]);
     const [editingPhoto, setEditingPhoto] = useState<Photo | null>(null);
     const [loading, setLoading] = useState(false);
-    const [file, setFile] = useState<File | null>(null);
+    const [files, setFiles] = useState<File[]>([]);
     const [imageUrl, setImageUrl] = useState("");
     const [caption, setCaption] = useState("");
 
@@ -55,7 +55,9 @@ const AdminJourneyPhotos = () => {
 
     const uploadFileToStorage = async (fileToUpload: File): Promise<string> => {
         const ext = fileToUpload.name.split(".").pop();
-        const path = `journey_photos/${id}/${Date.now()}.${ext}`;
+        // Add random string to prevent batch upload collisions on same timestamp
+        const randomStr = Math.random().toString(36).substring(7);
+        const path = `journey_photos/${id}/${Date.now()}_${randomStr}.${ext}`;
         const { error: uploadError } = await supabase.storage.from("gallery").upload(path, fileToUpload);
         if (uploadError) throw uploadError;
 
@@ -69,19 +71,19 @@ const AdminJourneyPhotos = () => {
 
         setLoading(true);
         try {
-            let finalUrl = imageUrl;
-            if (file) {
-                finalUrl = await uploadFileToStorage(file);
-            }
-
-            if (!finalUrl) {
-                toast({ title: "Please select an image file, existing photo, or enter an image URL", variant: "destructive" });
-                setLoading(false);
-                return;
-            }
-
             if (editingPhoto) {
-                // Update existing photo
+                // Update existing photo (only uses first file if multiple selected)
+                let finalUrl = imageUrl;
+                if (files.length > 0) {
+                    finalUrl = await uploadFileToStorage(files[0]);
+                }
+
+                if (!finalUrl) {
+                    toast({ title: "Please select an image file or enter an image URL", variant: "destructive" });
+                    setLoading(false);
+                    return;
+                }
+
                 const { error: updateError } = await supabase
                     .from("journey_photos")
                     .update({
@@ -93,20 +95,39 @@ const AdminJourneyPhotos = () => {
                 if (updateError) throw updateError;
                 toast({ title: "Photo updated successfully" });
             } else {
-                // Insert new photo
-                const { error: insertError } = await supabase.from("journey_photos").insert({
-                    journey_id: id,
-                    image_url: finalUrl,
-                    caption: caption || null
-                });
-                if (insertError) throw insertError;
-                toast({ title: "Photo added successfully" });
+                // Batch insert logic
+                if (files.length > 0) {
+                    const uploadPromises = files.map(async (f) => {
+                        const finalUrl = await uploadFileToStorage(f);
+                        await supabase.from("journey_photos").insert({
+                            journey_id: id,
+                            image_url: finalUrl,
+                            caption: caption || null
+                        });
+                    });
+                    
+                    await Promise.all(uploadPromises);
+                    toast({ title: `${files.length} photo(s) added successfully` });
+                } else {
+                    if (!imageUrl) {
+                        toast({ title: "Please select image files, an existing photo, or enter a URL", variant: "destructive" });
+                        setLoading(false);
+                        return;
+                    }
+                    const { error: insertError } = await supabase.from("journey_photos").insert({
+                        journey_id: id,
+                        image_url: imageUrl,
+                        caption: caption || null
+                    });
+                    if (insertError) throw insertError;
+                    toast({ title: "Photo added successfully" });
+                }
             }
 
             resetForm();
             fetchJourneyAndPhotos();
         } catch (err: any) {
-            toast({ title: "Error saving photo", description: err.message, variant: "destructive" });
+            toast({ title: "Error saving photo(s)", description: err.message, variant: "destructive" });
         }
         setLoading(false);
     };
@@ -122,12 +143,12 @@ const AdminJourneyPhotos = () => {
         setEditingPhoto(p);
         setImageUrl(p.image_url);
         setCaption(p.caption || "");
-        setFile(null);
+        setFiles([]);
     };
 
     const resetForm = () => {
         setEditingPhoto(null);
-        setFile(null);
+        setFiles([]);
         setImageUrl("");
         setCaption("");
     };
@@ -142,7 +163,7 @@ const AdminJourneyPhotos = () => {
                 <p className="text-muted-foreground mb-8">Managing photos for: <strong className="text-foreground">{journey?.title || "..."}</strong></p>
 
                 <form onSubmit={handleSubmit} className="bg-card border border-border rounded-lg p-6 mb-8 space-y-4">
-                    <h2 className="font-display text-lg font-semibold text-foreground">{editingPhoto ? "Edit / Replace Photo" : "Add New Photo"}</h2>
+                    <h2 className="font-display text-lg font-semibold text-foreground">{editingPhoto ? "Edit / Replace Photo" : "Add New Photo(s)"}</h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -151,7 +172,7 @@ const AdminJourneyPhotos = () => {
                                 value={imageUrl}
                                 onChange={(e) => {
                                     setImageUrl(e.target.value);
-                                    setFile(null);
+                                    setFiles([]);
                                 }}
                                 className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
                             >
@@ -162,8 +183,17 @@ const AdminJourneyPhotos = () => {
                         </div>
 
                         <div>
-                            <Label className="text-xs text-muted-foreground">Or Upload a new image file:</Label>
-                            <Input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} className="mt-1" />
+                            <Label className="text-xs text-muted-foreground">Or Select Multiple Images/Folder:</Label>
+                            <Input 
+                                type="file" 
+                                accept="image/*" 
+                                multiple 
+                                // @ts-ignore
+                                webkitdirectory={undefined} /* We just use standard multiple to allow Ctrl+A in a folder */
+                                onChange={(e) => setFiles(Array.from(e.target.files || []))} 
+                                className="mt-1" 
+                            />
+                            <p className="text-[10px] text-muted-foreground mt-1">You can drag and drop multiple files, or press Ctrl+A inside a folder.</p>
                         </div>
                     </div>
 
@@ -179,23 +209,23 @@ const AdminJourneyPhotos = () => {
                     </div>
 
                     <div>
-                        <Label>Caption (Optional)</Label>
+                        <Label>Caption (Optional, applies to all if batch uploading)</Label>
                         <Input value={caption} onChange={(e) => setCaption(e.target.value)} placeholder="Enter a caption..." className="mt-1" />
                     </div>
 
-                    {(imageUrl || file) && (
+                    {(imageUrl || files.length > 0) && (
                         <div className="flex items-center gap-4 bg-muted/40 p-3 rounded border border-border">
-                            <div className="w-16 h-16 rounded overflow-hidden bg-black flex-shrink-0 border border-white/10">
-                                <img
-                                    src={file ? URL.createObjectURL(file) : imageUrl}
-                                    alt="Preview"
-                                    className="w-full h-full object-cover"
-                                />
+                            <div className="w-16 h-16 rounded overflow-hidden bg-black flex-shrink-0 border border-white/10 flex items-center justify-center text-xs text-muted-foreground">
+                                {files.length > 0 ? (
+                                    <span className="font-bold">+{files.length}</span>
+                                ) : (
+                                    <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                                )}
                             </div>
                             <div className="text-xs space-y-1">
-                                <span className="font-semibold block text-foreground">Photo Preview</span>
+                                <span className="font-semibold block text-foreground">Upload Preview</span>
                                 <p className="text-[10px] text-muted-foreground truncate max-w-sm">
-                                    {file ? `New file: ${file.name}` : imageUrl}
+                                    {files.length > 0 ? `${files.length} file(s) selected for upload` : imageUrl}
                                 </p>
                             </div>
                         </div>
@@ -204,7 +234,7 @@ const AdminJourneyPhotos = () => {
                     <div className="flex gap-2">
                         <Button type="submit" disabled={loading}>
                             {loading ? <Loader2 className="animate-spin mr-2" size={16} /> : <Upload className="mr-2" size={16} />}
-                            {editingPhoto ? "Update / Replace Photo" : "Upload / Add Photo"}
+                            {editingPhoto ? "Update / Replace Photo" : (files.length > 1 ? `Upload ${files.length} Photos` : "Upload / Add Photo")}
                         </Button>
                         {editingPhoto && (
                             <Button type="button" variant="outline" onClick={resetForm}>
@@ -217,7 +247,7 @@ const AdminJourneyPhotos = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {photos.map((p) => (
                         <div key={p.id} className="relative group rounded-lg overflow-hidden border border-border aspect-square bg-muted">
-                            <img src={p.image_url} alt="Gallery item" className="w-full h-full object-cover" />
+                            <img src={p.image_url} alt="Gallery item" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-3 gap-2">
                                 {p.caption && (
                                     <p className="text-[11px] text-white text-center line-clamp-2 px-1">{p.caption}</p>

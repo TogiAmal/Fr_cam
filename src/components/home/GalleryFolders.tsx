@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Folder, Image as ImageIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { Folder, Image as ImageIcon, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 
 const defaultJourneys = [
   { id: "1", title: "Western Ghats", cover_image_url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=95", description: "Western Ghats Rainforest Expedition" },
@@ -44,7 +45,7 @@ const GalleryFolders = () => {
           return 0;
         });
 
-        const finalFolders = sorted.slice(0, 4);
+        const finalFolders = sorted.slice(0, 3);
         
         if (finalFolders.length > 0) {
           setFolders(finalFolders);
@@ -139,18 +140,12 @@ const GalleryFolders = () => {
           >
             <Link to={`/gallery/${folder.id}`} className="block w-full h-full cursor-pointer">
               <img
-                src={
-                  folder.title.toLowerCase().includes("masai") || 
-                  folder.title.toLowerCase().includes("maasai") || 
-                  folder.title.toLowerCase().includes("mazai") 
-                    ? "/images/lion.jpg" 
-                    : (folder.title.toLowerCase().includes("kaziranga") || folder.title.toLowerCase().includes("kazienga") || folder.title.toLowerCase().includes("kazirng"))
-                    ? "/images/kazirangayile-ottakkombanmar.jpg"
-                    : (folder.cover_image_url || folder.cover)
-                }
+                src={folder.cover_image_url || folder.cover || "/images/frame1.jpg"}
                 alt={folder.title}
                 className="w-full h-full object-cover bg-card transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 draggable={false}
+                loading="lazy"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-primary mb-1">
@@ -168,6 +163,14 @@ const GalleryFolders = () => {
             </Link>
           </motion.div>
         ))}
+      </div>
+
+      <div className="text-center mt-12">
+        <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          <Link to="/gallery">
+            View All Collections <ArrowRight size={16} className="ml-2" />
+          </Link>
+        </Button>
       </div>
     </section>
   );

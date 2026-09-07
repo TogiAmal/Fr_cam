@@ -176,6 +176,7 @@ const JourneyGallery = () => {
                       alt={p.caption || "Journey photo"}
                       className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                       loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
                       {p.caption && (

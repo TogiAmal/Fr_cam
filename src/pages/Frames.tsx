@@ -6,17 +6,8 @@ import { Frame, MessageCircle } from "lucide-react";
 import { SOCIAL_LINKS } from "@/config/social";
 import { supabase } from "@/integrations/supabase/client";
 
-const DEFAULT_FRAMES = [
-  { id: "1", title: "Golden Sunset Egret", image_url: "https://images.unsplash.com/photo-1557401620-67270b4a4e1e?w=1200&q=95", size: '18" × 24"', price: "₹8,500" },
-  { id: "2", title: "Misty Morning Deer", image_url: "https://images.unsplash.com/photo-1484406566174-437a054e96e1?w=1200&q=95", size: '24" × 36"', price: "₹12,000" },
-  { id: "3", title: "Kingfisher Dive", image_url: "https://images.unsplash.com/photo-1579380656108-f98e4df8ea62?w=1200&q=95", size: '16" × 20"', price: "₹6,500" },
-  { id: "4", title: "Elephant at Dusk", image_url: "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=1200&q=95", size: '24" × 36"', price: "₹14,000" },
-  { id: "5", title: "Hornbill Portrait", image_url: "https://images.unsplash.com/photo-1452570053594-1b985d6ea890?w=1200&q=95", size: '12" × 16"', price: "₹5,000" },
-  { id: "6", title: "Leopard Gaze", image_url: "https://images.unsplash.com/photo-1456926631375-92c8ce872def?w=1200&q=95", size: '20" × 30"', price: "₹15,000" },
-];
-
 const Frames = () => {
-  const [frames, setFrames] = useState<any[]>(DEFAULT_FRAMES);
+  const [frames, setFrames] = useState<any[]>([]);
 
   useEffect(() => {
     supabase.from("frames").select("*").order("sort_order").then(({ data }) => {
@@ -48,7 +39,7 @@ const Frames = () => {
                 className="bg-card rounded-lg overflow-hidden border border-border hover:border-primary/30 transition-colors group"
               >
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img src={f.image_url || f.image} alt={f.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={f.image_url || f.image} alt={f.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
                 </div>
                 <div className="p-5">
                   <h3 className="font-display text-lg font-semibold text-foreground mb-1">{f.title}</h3>

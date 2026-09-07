@@ -39,11 +39,11 @@ const Adventure = () => {
       <div className="pt-24 pb-16 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-widest text-white mb-3">
-              <Compass className="inline mr-3 text-white" size={36} />
+            <h1 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-widest text-black mb-3">
+              <Compass className="inline mr-3 text-black" size={36} />
               Adventures
             </h1>
-            <p className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="font-body text-xs uppercase tracking-[0.2em] text-black">
               Deep wild expeditions captured on camera
             </p>
           </div>
@@ -54,22 +54,22 @@ const Adventure = () => {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-white/10 group-hover:border-white transition-colors cursor-pointer"
+                  className="flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-green-900/20 group-hover:border-black transition-colors cursor-pointer"
                 >
                   <div className="flex items-start gap-6">
-                    <span className="font-mono text-xs text-muted-foreground pt-1.5">
+                    <span className="font-mono text-xs text-green-700 pt-1.5 group-hover:text-black transition-colors">
                       {(i + 1).toString().padStart(2, "0")}
                     </span>
                     <div className="space-y-1">
-                      <h3 className="font-display text-xl md:text-2xl font-semibold tracking-wider text-white uppercase group-hover:text-amber-500 transition-colors">
+                      <h3 className="font-display text-xl md:text-2xl font-semibold tracking-wider text-green-900 uppercase group-hover:text-black transition-colors">
                         {adv.title}
                       </h3>
-                      <p className="font-body text-sm text-muted-foreground max-w-2xl group-hover:text-neutral-300 transition-colors">
+                      <p className="font-body text-sm text-green-800 max-w-2xl group-hover:text-black transition-colors">
                         {adv.description}
                       </p>
                     </div>
                   </div>
-                  <div className="mt-4 md:mt-0 font-body text-xs uppercase tracking-[0.2em] text-white/30 group-hover:text-white transition-colors flex items-center gap-1.5">
+                  <div className="mt-4 md:mt-0 font-body text-xs uppercase tracking-[0.2em] text-green-800/60 group-hover:text-black transition-colors flex items-center gap-1.5">
                     View Gallery <span>→</span>
                   </div>
                 </motion.div>

@@ -5,15 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
-const defaultProduct = {
-  id: "default-frame",
-  title: "Majestic Leopard",
-  size: "24 x 36 inches",
-  price: "$299.00",
-  image_url: "/images/leopard.jpg",
-  available: true,
-};
-
 const ProductFrameSection = () => {
   const [products, setProducts] = useState<any[]>([]);
 
@@ -21,8 +12,6 @@ const ProductFrameSection = () => {
     supabase.from("frames").select("*").order("sort_order").then(({ data }) => {
       if (data && data.length > 0) {
         setProducts(data);
-      } else {
-        setProducts([defaultProduct]);
       }
     });
   }, []);
@@ -63,6 +52,8 @@ const ProductFrameSection = () => {
                      src={product.image_url || "/images/leopard.jpg"}
                      alt={product.title}
                      className="w-full h-full object-cover"
+                     loading="lazy"
+                     decoding="async"
                   />
                 </div>
               </div>
@@ -72,9 +63,10 @@ const ProductFrameSection = () => {
                 <div>
                   <div className="flex items-center gap-1.5 text-xs text-muted-foreground uppercase tracking-widest mb-1.5">
                     <Frame size={12} />
-                    <span>Premium Canvas</span>
+                    <span>Acrylic Canvas</span>
                   </div>
-                  <h3 className="font-display text-lg font-semibold tracking-wider text-foreground uppercase group-hover:text-primary transition-colors">
+                  <h3 className="font-display text-lg font-semibold tracking-wider text-foreground uppercase group-hover:text-primary transition-colors flex items-center gap-2">
+                    <span className="text-muted-foreground/50 text-sm">#{(i + 1).toString().padStart(2, '0')}</span>
                     {product.title}
                   </h3>
                   <p className="font-body text-xs text-muted-foreground mt-1">
@@ -85,7 +77,7 @@ const ProductFrameSection = () => {
                 <div className="flex items-center justify-between pt-2">
                   {/* Price Tag Element */}
                   <span className="font-mono text-lg font-bold text-foreground tracking-wide">
-                    {product.price || "Contact for Pricing"}
+                    {product.price ? `₹ ${product.price.toString().replace('$', '').trim()}` : "Contact for Pricing"}
                   </span>
                   
                   {/* Button */}
