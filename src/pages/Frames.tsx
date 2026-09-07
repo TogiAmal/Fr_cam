@@ -5,8 +5,10 @@ import { motion } from "framer-motion";
 import { Frame, MessageCircle } from "lucide-react";
 import { SOCIAL_LINKS } from "@/config/social";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Frames = () => {
+  const { toast } = useToast();
   const [frames, setFrames] = useState<any[]>([]);
 
   useEffect(() => {
@@ -45,14 +47,12 @@ const Frames = () => {
                   <h3 className="font-display text-lg font-semibold text-foreground mb-1">{f.title}</h3>
                   <p className="font-body text-xs text-muted-foreground mb-1">{f.size}</p>
                   <p className="font-display text-lg text-primary font-bold mb-3">{f.price}</p>
-                  <a
-                    href={SOCIAL_LINKS.getFrameInquiryLink(f.title, f.size || "", f.price || "")}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 font-body text-sm bg-[#25D366] text-black font-semibold px-4 py-2 rounded hover:bg-[#25D366]/90 transition-colors"
+                  <button
+                    onClick={(e) => SOCIAL_LINKS.handleInstagramPurchase(e, f.title, (i + 1).toString().padStart(2, '0'), toast)}
+                    className="inline-flex items-center gap-2 font-body text-sm bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-semibold px-4 py-2 rounded hover:opacity-90 transition-opacity"
                   >
-                    <MessageCircle size={16} /> Buy via WhatsApp
-                  </a>
+                    <MessageCircle size={16} /> Buy via Instagram
+                  </button>
                 </div>
               </motion.div>
             ))}

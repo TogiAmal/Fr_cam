@@ -21,5 +21,31 @@ export const SOCIAL_LINKS = {
     const detailsStr = details ? ` (${details})` : "";
     const text = encodeURIComponent(`Hi Fr. Jose, I would like to inquire about purchasing the "${frameTitle}" frame${detailsStr}.`);
     return `https://wa.me/${SOCIAL_LINKS.whatsappNumber}?text=${text}`;
+  },
+
+  handleInstagramPurchase: (e: React.MouseEvent, productName: string, productNumber: string, toastFn?: any) => {
+    e.preventDefault();
+    const message = `Hi Fr. Jose, I would like to purchase the product #${productNumber}: "${productName}". Please share the details!`;
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(message).then(() => {
+      if (toastFn) {
+        toastFn({
+          title: "Message Copied!",
+          description: "Purchase inquiry copied to clipboard. Paste it in the Instagram chat!",
+          duration: 4000,
+        });
+      } else {
+        alert("Purchase inquiry copied to clipboard! Paste it in the Instagram chat.");
+      }
+      
+      // Open Instagram DM
+      setTimeout(() => {
+        window.open("https://ig.me/m/fr_cam", "_blank");
+      }, 500);
+    }).catch(() => {
+      // Fallback
+      window.open("https://ig.me/m/fr_cam", "_blank");
+    });
   }
 };

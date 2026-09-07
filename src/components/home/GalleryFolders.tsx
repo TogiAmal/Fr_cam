@@ -136,29 +136,39 @@ const GalleryFolders = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="flex-shrink-0 w-[300px] md:w-[450px] aspect-[4/3] rounded overflow-hidden border border-border bg-card group relative snap-start"
+            className="flex-shrink-0 w-[300px] md:w-[450px] rounded-lg overflow-hidden border border-border bg-card group relative snap-start flex flex-col shadow-sm hover:shadow-md transition-shadow"
           >
-            <Link to={`/gallery/${folder.id}`} className="block w-full h-full cursor-pointer">
-              <img
-                src={folder.cover_image_url || folder.cover || "/images/frame1.jpg"}
-                alt={folder.title}
-                className="w-full h-full object-cover bg-card transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                draggable={false}
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-primary mb-1">
-                  Collection Folder
-                </span>
-                <h3 className="font-display text-lg font-semibold tracking-wider text-white uppercase transition-colors">
-                  {folder.title}
-                </h3>
-                {folder.description && (
-                  <p className="text-white/80 text-xs font-body mt-2 line-clamp-2 leading-relaxed">
-                    {folder.description}
-                  </p>
-                )}
+            <Link to={`/gallery/${folder.id}`} className="block w-full h-full cursor-pointer flex flex-col">
+              {/* Folder Header (Always visible above image) */}
+              <div className="p-5 flex items-start justify-between bg-secondary/30 border-b border-border">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-primary mb-1 flex items-center gap-1.5">
+                    <Folder size={12} /> Collection Folder
+                  </span>
+                  <h3 className="font-display text-lg font-semibold tracking-wider text-foreground uppercase mt-1 transition-colors group-hover:text-primary">
+                    {folder.title}
+                  </h3>
+                  {folder.description && (
+                    <p className="text-muted-foreground text-xs font-body mt-2 line-clamp-2 leading-relaxed">
+                      {folder.description}
+                    </p>
+                  )}
+                </div>
+                <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors shrink-0">
+                  <ArrowRight size={14} />
+                </div>
+              </div>
+
+              {/* Folder Image */}
+              <div className="relative aspect-[4/3] overflow-hidden bg-muted flex-1">
+                <img
+                  src={folder.cover_image_url || folder.cover || "/images/frame1.jpg"}
+                  alt={folder.title}
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  draggable={false}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             </Link>
           </motion.div>
