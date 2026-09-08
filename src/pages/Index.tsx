@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/home/HeroSection";
-
+import WhoIsFrcam from "@/components/home/WhoIsFrcam";
 import GalleryFolders from "@/components/home/GalleryFolders";
 import CameraFrameSection from "@/components/home/CameraFrameSection";
 import BooksSection from "@/components/home/BooksSection";
@@ -14,6 +14,9 @@ const Index = () => {
       
       {/* Section 1: Welcome Screen (Hero) */}
       <HeroSection />
+
+      {/* Section 2: Who is fr_cam with horizontal image carousel */}
+      <WhoIsFrcam />
 
       {/* Section 3: Gallery Folders */}
       <GalleryFolders />
