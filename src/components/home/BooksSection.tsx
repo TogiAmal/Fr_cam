@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Book, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { SOCIAL_LINKS } from "@/config/social";
 
 const defaultBooks = [
   { id: "1", title: "Wildlife Whispers", language: "English", cover_image_url: "/images/frcam_hero.jpg", description: "Journey into the deep woods" },
@@ -112,9 +113,9 @@ const BooksSection = () => {
             transition={{ duration: 0.6, delay: index * 0.1 }}
             className="flex-shrink-0 w-[300px] md:w-[450px] rounded-lg overflow-hidden border border-border bg-card group relative snap-start flex flex-col shadow-sm hover:shadow-md transition-shadow"
           >
-            <a href={book.purchase_link || "#"} target={book.purchase_link ? "_blank" : "_self"} rel="noopener noreferrer" className="block w-full h-full cursor-pointer flex flex-col">
+            <div className="block w-full h-full flex flex-col">
               {/* Header */}
-              <div className="p-5 flex items-start justify-between bg-secondary/30 border-b border-border">
+              <Link to="/books" className="p-5 flex items-start justify-between bg-secondary/30 border-b border-border group-hover:bg-secondary/50 transition-colors">
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-widest text-primary mb-1 flex items-center gap-1.5">
                     <Book size={12} /> {book.language || "English"}
@@ -131,10 +132,10 @@ const BooksSection = () => {
                 <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors shrink-0">
                   <ArrowRight size={14} />
                 </div>
-              </div>
+              </Link>
 
               {/* Cover Image */}
-              <div className="relative aspect-[3/4] md:aspect-square overflow-hidden bg-muted flex-1 p-6 flex items-center justify-center">
+              <Link to="/books" className="relative aspect-[3/4] md:aspect-square overflow-hidden bg-muted flex-1 p-6 flex items-center justify-center">
                 <img
                   src={book.cover_image_url || "/images/frame1.jpg"}
                   alt={book.title}
@@ -143,8 +144,24 @@ const BooksSection = () => {
                   loading="lazy"
                   decoding="async"
                 />
+              </Link>
+
+              {/* Actions */}
+              <div className="p-4 bg-secondary/20 border-t border-border flex gap-3">
+                <button 
+                  onClick={(e) => SOCIAL_LINKS.handleInstagramBookPurchase(e, book.title)}
+                  className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md font-medium text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                >
+                  Purchase
+                </button>
+                <Link 
+                  to="/books"
+                  className="flex-1 bg-background border border-border text-foreground py-2.5 rounded-md font-medium text-sm tracking-wider uppercase hover:bg-secondary transition-colors flex items-center justify-center"
+                >
+                  More
+                </Link>
               </div>
-            </a>
+            </div>
           </motion.div>
         ))}
       </div>

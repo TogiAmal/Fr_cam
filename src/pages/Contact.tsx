@@ -83,7 +83,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-display text-xs uppercase tracking-wider text-white flex items-center gap-2">
-                      Instagram Profile <span className="text-[10px] text-pink-400 font-normal">@fr_cam</span>
+                      Instagram Profile <span className="text-[10px] text-pink-400 font-normal">@fr_cam_jp</span>
                     </h4>
                     <p className="font-body text-sm text-muted-foreground">Follow latest wildlife updates</p>
                   </div>

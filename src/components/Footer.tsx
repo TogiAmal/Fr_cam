@@ -34,7 +34,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 font-body text-sm px-4 py-2 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-orange-500/10 text-pink-400 border border-pink-500/20 rounded-md hover:bg-pink-500/20 transition-all w-fit font-medium"
               >
-                <InstagramIcon size={18} /> @fr_cam on Instagram
+                <InstagramIcon size={18} /> @fr_cam_jp on Instagram
               </a>
             </div>
           </div>

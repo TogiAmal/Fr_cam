@@ -9,12 +9,12 @@ const FloatingSocialButtons = () => {
         href={SOCIAL_LINKS.instagram}
         target="_blank"
         rel="noopener noreferrer"
-        title="Follow on Instagram @fr_cam"
+        title="Follow on Instagram @fr_cam_jp"
         className="w-12 h-12 rounded-full bg-gradient-to-tr from-yellow-500 via-pink-600 to-purple-600 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300 group relative"
       >
         <InstagramIcon size={24} />
         <span className="absolute right-14 bg-black/80 text-white text-xs font-semibold px-2.5 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-          Instagram @fr_cam
+          Instagram @fr_cam_jp
         </span>
       </a>
 

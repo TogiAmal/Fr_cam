@@ -126,15 +126,13 @@ const Books = () => {
                   </p>
 
                   <div className="pt-4 flex flex-wrap gap-4 justify-center md:justify-start">
-                    <a
-                      href={book.purchase_link || SOCIAL_LINKS.getBookInquiryLink(book.title)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 border border-[#25D366]/40 text-[#25D366] hover:border-[#25D366] hover:bg-[#25D366] hover:text-black uppercase tracking-widest text-xs font-semibold transition-all duration-300 rounded-sm bg-[#25D366]/10"
+                    <button
+                      onClick={(e) => SOCIAL_LINKS.handleInstagramBookPurchase(e, book.title)}
+                      className="inline-flex items-center gap-2 px-6 py-3 border border-pink-500/40 text-pink-500 hover:border-pink-500 hover:bg-pink-500 hover:text-white uppercase tracking-widest text-xs font-semibold transition-all duration-300 rounded-sm bg-pink-500/10"
                     >
                       <MessageCircle size={14} />
-                      Inquire & Buy via WhatsApp
-                    </a>
+                      Purchase via Instagram
+                    </button>
                   </div>
                 </div>
               </motion.div>

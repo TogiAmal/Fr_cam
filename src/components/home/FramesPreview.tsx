@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Frame, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SOCIAL_LINKS } from "@/config/social";
 
 const placeholderFrames = [
   {
@@ -28,8 +29,6 @@ const placeholderFrames = [
 ];
 
 const FramesPreview = () => {
-  const whatsappBase = "https://wa.me/919876543210?text=";
-
   return (
     <section id="frames" className="py-24 px-4">
       <div className="max-w-6xl mx-auto">
@@ -66,14 +65,12 @@ const FramesPreview = () => {
                 <h3 className="font-display text-lg font-semibold text-foreground mb-1">{f.title}</h3>
                 <p className="font-body text-xs text-muted-foreground mb-1">{f.size}</p>
                 <p className="font-display text-lg text-primary font-bold mb-3">{f.price}</p>
-                <a
-                  href={`${whatsappBase}${encodeURIComponent(`Hi Fr. Jose, I'm interested in the "${f.title}" frame (${f.size}, ${f.price}).`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 font-body text-sm bg-primary text-primary-foreground px-4 py-2 rounded hover:bg-primary/90 transition-colors"
+                <button
+                  onClick={(e) => SOCIAL_LINKS.handleInstagramPurchase(e, f.title, (i + 1).toString().padStart(2, '0'))}
+                  className="inline-flex items-center gap-2 font-body text-sm bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-semibold px-4 py-2 rounded hover:opacity-90 transition-opacity"
                 >
-                  Buy via WhatsApp
-                </a>
+                  Buy via Instagram
+                </button>
               </div>
             </motion.div>
           ))}
