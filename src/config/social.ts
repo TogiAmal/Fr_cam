@@ -6,7 +6,7 @@ export const SOCIAL_LINKS = {
   whatsappNumber: "919876543210",
   
   getWhatsAppLink: (message?: string) => {
-    const defaultMsg = "Hi Fr. Jose, I am reaching out from your website.";
+    const defaultMsg = "Hi Sir, I am reaching out from your website.";
     const text = encodeURIComponent(message || defaultMsg);
     return `https://wa.me/${SOCIAL_LINKS.whatsappNumber}?text=${text}`;
   },
@@ -18,13 +18,13 @@ export const SOCIAL_LINKS = {
   getFrameInquiryLink: (frameTitle: string, size?: string, price?: string) => {
     const details = [size, price].filter(Boolean).join(", ");
     const detailsStr = details ? ` (${details})` : "";
-    const text = encodeURIComponent(`Hi Fr. Jose, I would like to inquire about purchasing the "${frameTitle}" frame${detailsStr}.`);
+    const text = encodeURIComponent(`Hi Sir, I would like to inquire about purchasing the "${frameTitle}" frame${detailsStr}.`);
     return `https://wa.me/${SOCIAL_LINKS.whatsappNumber}?text=${text}`;
   },
 
   handleInstagramPurchase: (e: React.MouseEvent, productName: string, productNumber: string, toastFn?: any) => {
     e.preventDefault();
-    const message = `Hi Fr. Jose, I would like to purchase the product #${productNumber}: "${productName}". Please share the details!`;
+    const message = `Hi Sir, I would like to purchase the product #${productNumber}: "${productName}". Please share the details!`;
     
     // Copy to clipboard
     navigator.clipboard.writeText(message).then(() => {
@@ -50,7 +50,7 @@ export const SOCIAL_LINKS = {
 
   handleInstagramBookPurchase: (e: React.MouseEvent, bookTitle: string, toastFn?: any) => {
     if (e) e.preventDefault();
-    const message = `Hi Fr. Jose, I am interested in ordering your book "${bookTitle}". Please share ordering details.`;
+    const message = `Hi Sir, I am interested in ordering your book "${bookTitle}". Please share ordering details.`;
     
     // Copy to clipboard
     navigator.clipboard.writeText(message).then(() => {

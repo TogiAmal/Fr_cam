@@ -56,7 +56,7 @@ const Contact = () => {
               </p>
               <div className="space-y-6">
                 <a
-                  href={SOCIAL_LINKS.getWhatsAppLink("Hi Fr. Jose, I am reaching out from your website.")}
+                  href={SOCIAL_LINKS.getWhatsAppLink("Hi Sir, I am reaching out from your website.")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 group"
