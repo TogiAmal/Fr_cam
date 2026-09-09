@@ -147,19 +147,13 @@ const BooksSection = () => {
               </Link>
 
               {/* Actions */}
-              <div className="p-4 bg-secondary/20 border-t border-border flex gap-3">
+              <div className="p-4 bg-secondary/20 border-t border-border flex justify-center">
                 <button 
                   onClick={(e) => SOCIAL_LINKS.handleInstagramBookPurchase(e, book.title)}
-                  className="flex-1 bg-primary text-primary-foreground py-2.5 rounded-md font-medium text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                  className="inline-flex items-center gap-2 font-body text-sm bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-semibold px-6 py-2.5 rounded hover:opacity-90 transition-opacity uppercase tracking-wider w-full justify-center"
                 >
                   Purchase
                 </button>
-                <Link 
-                  to="/books"
-                  className="flex-1 bg-background border border-border text-foreground py-2.5 rounded-md font-medium text-sm tracking-wider uppercase hover:bg-secondary transition-colors flex items-center justify-center"
-                >
-                  More
-                </Link>
               </div>
             </div>
           </motion.div>
