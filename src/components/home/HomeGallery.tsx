@@ -174,7 +174,7 @@ const HomeGallery = () => {
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
-        className="flex gap-6 overflow-x-auto py-4 px-6 md:px-12 no-scrollbar scrollbar-none snap-x snap-mandatory scroll-smooth cursor-grab active:cursor-grabbing select-none"
+        className="flex gap-6 overflow-x-auto py-4 px-6 md:px-12 xl:px-[calc((100vw-1280px)/2+48px)] no-scrollbar scrollbar-none snap-x snap-mandatory scroll-smooth cursor-grab active:cursor-grabbing select-none"
       >
         {photos.map((photo, index) => (
           <motion.div
