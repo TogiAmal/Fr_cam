@@ -17,7 +17,8 @@ const METADATA_PRESETS = [
 ];
 
 const EditorialHeader = () => {
-  const [images, setImages] = useState<string[]>(DEFAULT_IMAGES);
+  const [images, setImages] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("fr_cam");
   const [subtitle, setSubtitle] = useState("Forest & Wildlife Explorer");
   const [description, setDescription] = useState("Embarking on journeys deep into the forest to capture the untamed beauty of wildlife and nature through photography.");
@@ -53,10 +54,12 @@ const EditorialHeader = () => {
           // Show only the uploaded images, don't mix in defaults
           setImages(dbImages.slice(0, 3));
         } else {
-          setImages(DEFAULT_IMAGES);
+          setImages([]);
         }
       } catch (err) {
         console.error("Error fetching hero settings:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchSettings();

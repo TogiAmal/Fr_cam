@@ -11,7 +11,8 @@ const DEFAULT_IMAGES = [
 
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [images, setImages] = useState<string[]>(DEFAULT_IMAGES);
+  const [images, setImages] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("fr_cam");
   const [subtitle, setSubtitle] = useState("Forest & Wildlife Explorer");
   const [description, setDescription] = useState("Embarking on journeys deep into the forest to capture the untamed beauty of wildlife and nature through photography.");
@@ -45,10 +46,12 @@ const HeroSection = () => {
           const dbImages = iData.map(img => img.image_url);
           setImages(dbImages);
         } else {
-          setImages(DEFAULT_IMAGES);
+          setImages([]); // No dummy images fallback
         }
       } catch (err) {
         console.error("Error fetching hero settings:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchSettings();
@@ -63,25 +66,23 @@ const HeroSection = () => {
   }, [currentIndex, images]);
 
   return (
-    <section className="relative h-screen flex items-center justify-end overflow-hidden">
-      {/* Background overlay */}
-      <AnimatePresence mode="popLayout">
-        <motion.div
-          key={currentIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.1 }}
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url('${images[currentIndex]}')`,
-          }}
-        />
-      </AnimatePresence>
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/25 z-0" />
+    <section className="relative h-screen flex items-center justify-end overflow-hidden bg-black">
+      {/* Preload and crossfade images smoothly */}
+      {!isLoading && images.map((img, idx) => (
+          <div
+            key={img}
+            className="absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ease-in-out"
+            style={{
+              backgroundImage: `url('${img}')`,
+              opacity: idx === currentIndex ? 1 : 0,
+              zIndex: idx === currentIndex ? 1 : 0
+            }}
+          />
+      ))}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/25 z-10" />
 
       {/* Right-aligned Welcome text container */}
-      <div className="relative z-10 text-right px-6 md:px-16 max-w-2xl flex flex-col items-end justify-center">
+      <div className="relative z-20 text-right px-6 md:px-16 max-w-2xl flex flex-col items-end justify-center">
         <motion.span
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
