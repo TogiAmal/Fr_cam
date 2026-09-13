@@ -137,10 +137,7 @@ const BooksSection = () => {
                 </p>
               )}
               
-              <div className="mt-auto flex items-center justify-between mb-4">
-                <span className="font-body font-semibold text-foreground text-lg">
-                  ${book.price?.toFixed(2) || "49.99"}
-                </span>
+              <div className="mt-auto flex items-center justify-end mb-4">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-primary border border-primary/30 px-2 py-1 rounded">
                   {book.language || "English"}
                 </span>
