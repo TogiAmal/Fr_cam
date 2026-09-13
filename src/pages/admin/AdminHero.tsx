@@ -147,9 +147,18 @@ const AdminHero = () => {
             const { error: err2 } = await supabase.from("hero_images").update({ sort_order: index } as any).eq("id", newImages[swapIndex].id);
             
             if (err1 || err2) {
-                console.error("Error updating priority (column might be missing):", err1 || err2);
-                toast({ title: "Error updating priority", description: "You might need to create a 'sort_order' column in Supabase.", variant: "destructive" });
-                fetchData(); // Revert on error
+                // FALLBACK: Swap created_at timestamps if sort_order fails
+                const img1 = await supabase.from("hero_images").select("created_at").eq("id", newImages[index].id).single();
+                const img2 = await supabase.from("hero_images").select("created_at").eq("id", newImages[swapIndex].id).single();
+                
+                if (img1.data && img2.data) {
+                    await supabase.from("hero_images").update({ created_at: img2.data.created_at }).eq("id", newImages[index].id);
+                    await supabase.from("hero_images").update({ created_at: img1.data.created_at }).eq("id", newImages[swapIndex].id);
+                    toast({ title: "Priority updated (via timestamp fallback)" });
+                } else {
+                    toast({ title: "Error updating priority", description: "Could not swap timestamps.", variant: "destructive" });
+                    fetchData(); // Revert on error
+                }
             } else {
                 toast({ title: "Priority updated" });
             }

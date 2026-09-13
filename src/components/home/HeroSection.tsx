@@ -43,8 +43,7 @@ const HeroSection = () => {
 
         if (iData && iData.length > 0) {
           const dbImages = iData.map(img => img.image_url);
-          const filteredDbImages = dbImages.filter(url => url !== "/images/elephant.jpg" && url !== "/images/frcam_hero.jpg");
-          setImages(["/images/elephant.jpg", ...filteredDbImages]);
+          setImages(dbImages);
         } else {
           setImages(DEFAULT_IMAGES);
         }
@@ -57,10 +56,9 @@ const HeroSection = () => {
 
   useEffect(() => {
     if (images.length <= 1) return;
-    const delay = currentIndex === 0 ? 8000 : 3000;
     const timer = setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, delay);
+    }, 5000);
     return () => clearTimeout(timer);
   }, [currentIndex, images]);
 
@@ -73,7 +71,7 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.1 }}
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url('${images[currentIndex]}')`,

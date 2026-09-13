@@ -50,12 +50,8 @@ const EditorialHeader = () => {
 
         if (iData && iData.length > 0) {
           const dbImages = iData.map(img => img.image_url);
-          // Keep a mix of defaults and custom db images to make sure we have at least 3
-          const combined = [...dbImages];
-          while (combined.length < 3) {
-            combined.push(DEFAULT_IMAGES[combined.length % DEFAULT_IMAGES.length]);
-          }
-          setImages(combined.slice(0, 3));
+          // Show only the uploaded images, don't mix in defaults
+          setImages(dbImages.slice(0, 3));
         } else {
           setImages(DEFAULT_IMAGES);
         }
