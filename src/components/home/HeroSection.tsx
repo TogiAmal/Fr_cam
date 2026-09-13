@@ -11,8 +11,13 @@ const DEFAULT_IMAGES = [
 
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [images, setImages] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [images, setImages] = useState<string[]>(() => {
+    const cached = localStorage.getItem("heroImagesCache");
+    return cached ? JSON.parse(cached) : ["https://iyhiidcijufhmfsfcnki.supabase.co/storage/v1/object/public/gallery/hero_images/1789279529238.jpg"];
+  });
+  const [isLoading, setIsLoading] = useState(() => {
+    return localStorage.getItem("heroImagesCache") ? false : false; // Never true, we always have at least one image to show
+  });
   const [title, setTitle] = useState("fr_cam");
   const [subtitle, setSubtitle] = useState("Forest & Wildlife Explorer");
   const [description, setDescription] = useState("Embarking on journeys deep into the forest to capture the untamed beauty of wildlife and nature through photography.");
@@ -45,8 +50,10 @@ const HeroSection = () => {
         if (iData && iData.length > 0) {
           const dbImages = iData.map(img => img.image_url);
           setImages(dbImages);
+          localStorage.setItem("heroImagesCache", JSON.stringify(dbImages));
         } else {
           setImages([]); // No dummy images fallback
+          localStorage.removeItem("heroImagesCache");
         }
       } catch (err) {
         console.error("Error fetching hero settings:", err);

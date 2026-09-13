@@ -102,8 +102,9 @@ const BooksSection = () => {
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
-        className="flex gap-6 overflow-x-auto py-4 px-8 md:px-16 lg:px-24 xl:px-32 no-scrollbar scrollbar-none snap-x snap-mandatory scroll-smooth cursor-grab active:cursor-grabbing select-none"
+        className="flex gap-6 overflow-x-auto py-4 no-scrollbar scrollbar-none snap-x snap-mandatory scroll-smooth cursor-grab active:cursor-grabbing select-none"
       >
+        <div className="shrink-0 w-6 md:w-12 lg:w-16 xl:w-20 snap-start" aria-hidden="true" />
         {books.map((book, index) => (
           <motion.div
             key={book.id}
@@ -111,31 +112,10 @@ const BooksSection = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="flex-shrink-0 w-[300px] md:w-[450px] rounded-lg overflow-hidden border border-border bg-card group relative snap-start flex flex-col shadow-sm hover:shadow-md transition-shadow"
+            className="flex-shrink-0 w-[280px] md:w-[320px] rounded-lg overflow-hidden border border-border bg-card group relative snap-start flex flex-col shadow-sm hover:shadow-md transition-shadow"
           >
-            <div className="block w-full h-full flex flex-col">
-              {/* Header */}
-              <Link to="/books" className="p-5 flex items-start justify-between bg-secondary/30 border-b border-border group-hover:bg-secondary/50 transition-colors">
-                <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-primary mb-1 flex items-center gap-1.5">
-                    <Book size={12} /> {book.language || "English"}
-                  </span>
-                  <h3 className="font-display text-lg font-semibold tracking-wider text-foreground uppercase mt-1 transition-colors group-hover:text-primary">
-                    {book.title}
-                  </h3>
-                  {book.description && (
-                    <p className="text-muted-foreground text-xs font-body mt-2 line-clamp-2 leading-relaxed">
-                      {book.description}
-                    </p>
-                  )}
-                </div>
-                <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors shrink-0">
-                  <ArrowRight size={14} />
-                </div>
-              </Link>
-
-              {/* Cover Image */}
-              <Link to="/books" className="relative aspect-[3/4] md:aspect-square overflow-hidden bg-muted flex-1 p-6 flex items-center justify-center">
+            <Link to={`/books/${book.id}`} className="block w-full h-full cursor-pointer flex flex-col">
+              <div className="relative aspect-[3/4] overflow-hidden bg-muted">
                 <img
                   src={book.cover_image_url || "/images/frame1.jpg"}
                   alt={book.title}
@@ -144,20 +124,21 @@ const BooksSection = () => {
                   loading="lazy"
                   decoding="async"
                 />
-              </Link>
-
-              {/* Actions */}
-              <div className="p-4 bg-secondary/20 border-t border-border flex justify-center">
-                <button 
-                  onClick={(e) => SOCIAL_LINKS.handleInstagramBookPurchase(e, book.title)}
-                  className="inline-flex items-center gap-2 font-body text-sm bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-semibold px-6 py-2.5 rounded hover:opacity-90 transition-opacity uppercase tracking-wider w-full justify-center"
-                >
-                  Purchase
-                </button>
               </div>
+            </Link>
+
+            {/* Actions */}
+            <div className="p-4 bg-secondary/20 border-t border-border flex justify-center mt-auto">
+              <button 
+                onClick={(e) => SOCIAL_LINKS.handleInstagramBookPurchase(e, book.title)}
+                className="inline-flex items-center gap-2 font-body text-sm bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-semibold px-6 py-2.5 rounded hover:opacity-90 transition-opacity uppercase tracking-wider w-full justify-center"
+              >
+                Purchase
+              </button>
             </div>
           </motion.div>
         ))}
+        <div className="shrink-0 w-6 md:w-12 lg:w-16 xl:w-20 snap-end" aria-hidden="true" />
       </div>
 
       <div className="text-center mt-12">

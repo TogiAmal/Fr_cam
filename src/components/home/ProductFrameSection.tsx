@@ -124,20 +124,20 @@ const ProductFrameSection = () => {
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
-        className="flex gap-6 overflow-x-auto py-4 px-8 md:px-16 lg:px-24 xl:px-32 no-scrollbar scrollbar-none snap-x snap-mandatory scroll-smooth cursor-grab active:cursor-grabbing select-none"
+        className="flex gap-6 overflow-x-auto py-4 no-scrollbar scrollbar-none snap-x snap-mandatory scroll-smooth cursor-grab active:cursor-grabbing select-none"
       >
+        <div className="shrink-0 w-6 md:w-12 lg:w-16 xl:w-20 snap-start" aria-hidden="true" />
         {products.map((product, i) => (
           <motion.div
             key={product.id}
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: i * 0.1 }}
-            className="flex-shrink-0 w-[300px] md:w-[450px] flex flex-col bg-card border border-border rounded-lg overflow-hidden group hover:border-primary/30 transition-all duration-300 snap-start shadow-sm hover:shadow-md"
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+            className="flex-shrink-0 w-[280px] md:w-[320px] bg-card rounded-lg overflow-hidden border border-border group relative snap-start flex flex-col shadow-sm hover:shadow-md transition-shadow"
           >
-            {/* Product Frame Showcase */}
             <div 
-              className="p-6 bg-secondary/30 flex items-center justify-center aspect-square relative border-b border-border cursor-pointer"
+              className="relative aspect-square overflow-hidden bg-muted p-6 flex items-center justify-center cursor-pointer"
               onClick={() => {
                 if (!isDragging) openLightbox(i);
               }}

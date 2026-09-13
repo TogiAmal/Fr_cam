@@ -17,8 +17,13 @@ const METADATA_PRESETS = [
 ];
 
 const EditorialHeader = () => {
-  const [images, setImages] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [images, setImages] = useState<string[]>(() => {
+    const cached = localStorage.getItem("editorialImagesCache");
+    return cached ? JSON.parse(cached) : ["https://iyhiidcijufhmfsfcnki.supabase.co/storage/v1/object/public/gallery/hero_images/1789279529238.jpg"];
+  });
+  const [isLoading, setIsLoading] = useState(() => {
+    return localStorage.getItem("editorialImagesCache") ? false : false; // Never true, we always have at least one image to show
+  });
   const [title, setTitle] = useState("fr_cam");
   const [subtitle, setSubtitle] = useState("Forest & Wildlife Explorer");
   const [description, setDescription] = useState("Embarking on journeys deep into the forest to capture the untamed beauty of wildlife and nature through photography.");
@@ -52,9 +57,12 @@ const EditorialHeader = () => {
         if (iData && iData.length > 0) {
           const dbImages = iData.map(img => img.image_url);
           // Show only the uploaded images, don't mix in defaults
-          setImages(dbImages.slice(0, 3));
+          const sliced = dbImages.slice(0, 3);
+          setImages(sliced);
+          localStorage.setItem("editorialImagesCache", JSON.stringify(sliced));
         } else {
           setImages([]);
+          localStorage.removeItem("editorialImagesCache");
         }
       } catch (err) {
         console.error("Error fetching hero settings:", err);

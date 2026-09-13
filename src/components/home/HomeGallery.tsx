@@ -174,8 +174,9 @@ const HomeGallery = () => {
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
-        className="flex gap-6 overflow-x-auto py-4 px-8 md:px-16 lg:px-24 xl:px-32 no-scrollbar scrollbar-none snap-x snap-mandatory scroll-smooth cursor-grab active:cursor-grabbing select-none"
+        className="flex gap-6 overflow-x-auto py-4 no-scrollbar scrollbar-none snap-x snap-mandatory scroll-smooth cursor-grab active:cursor-grabbing select-none"
       >
+        <div className="shrink-0 w-6 md:w-12 lg:w-16 xl:w-20 snap-start" aria-hidden="true" />
         {photos.map((photo, index) => (
           <motion.div
             key={photo.id}
@@ -204,6 +205,7 @@ const HomeGallery = () => {
             </div>
           </motion.div>
         ))}
+        <div className="shrink-0 w-[24px] md:w-[48px] xl:w-[calc((100vw-1280px)/2+48px)]" aria-hidden="true" />
       </div>
 
 
