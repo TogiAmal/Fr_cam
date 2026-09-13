@@ -115,11 +115,11 @@ const BooksSection = () => {
             className="flex-shrink-0 w-[280px] md:w-[320px] rounded-lg overflow-hidden border border-border bg-card group relative snap-start flex flex-col shadow-sm hover:shadow-md transition-shadow"
           >
             <Link to={`/books/${book.id}`} className="block w-full cursor-pointer flex flex-col">
-              <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+              <div className="relative aspect-[4/3] overflow-hidden bg-background">
                 <img
                   src={book.cover_image_url || "/images/frame1.jpg"}
                   alt={book.title}
-                  className="max-h-full object-contain drop-shadow-2xl transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  className="w-full h-full object-cover drop-shadow-md transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                   draggable={false}
                   loading="lazy"
                   decoding="async"
