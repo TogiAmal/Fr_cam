@@ -68,7 +68,7 @@ const HeroSection = () => {
     if (images.length <= 1) return;
     const timer = setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 5000);
+    }, 3000);
     return () => clearTimeout(timer);
   }, [currentIndex, images]);
 
