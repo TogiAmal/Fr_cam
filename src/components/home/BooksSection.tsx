@@ -82,15 +82,15 @@ const BooksSection = () => {
 
       {/* Navigation Buttons */}
       <button
-        onClick={() => scrollByAmount("left")}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-card/70 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex"
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollByAmount("left"); }}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-[50] w-12 h-12 bg-card/90 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex cursor-pointer shadow-lg"
       >
         <ChevronLeft size={24} />
       </button>
 
       <button
-        onClick={() => scrollByAmount("right")}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-card/70 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex"
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollByAmount("right"); }}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-[50] w-12 h-12 bg-card/90 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex cursor-pointer shadow-lg"
       >
         <ChevronRight size={24} />
       </button>
@@ -114,7 +114,7 @@ const BooksSection = () => {
             transition={{ duration: 0.6, delay: index * 0.1 }}
             className="flex-shrink-0 w-[280px] md:w-[320px] rounded-lg overflow-hidden border border-border bg-card group relative snap-start flex flex-col shadow-sm hover:shadow-md transition-shadow"
           >
-            <Link to={`/books/${book.id}`} className="block w-full h-full cursor-pointer flex flex-col">
+            <Link to={`/books/${book.id}`} className="block w-full cursor-pointer flex flex-col">
               <div className="relative aspect-[3/4] overflow-hidden bg-muted">
                 <img
                   src={book.cover_image_url || "/images/frame1.jpg"}
@@ -126,12 +126,30 @@ const BooksSection = () => {
                 />
               </div>
             </Link>
-
-            {/* Actions */}
-            <div className="p-4 bg-secondary/20 border-t border-border flex justify-center mt-auto">
+            
+            <div className="p-5 flex-1 flex flex-col border-t border-border/50 bg-secondary/10">
+              <h3 className="font-display text-lg font-bold tracking-wider text-foreground transition-colors group-hover:text-primary line-clamp-2 mb-2">
+                {book.title}
+              </h3>
+              {book.description && (
+                <p className="text-muted-foreground text-xs font-body mb-4 line-clamp-3 leading-relaxed">
+                  {book.description}
+                </p>
+              )}
+              
+              <div className="mt-auto flex items-center justify-between mb-4">
+                <span className="font-body font-semibold text-foreground text-lg">
+                  ${book.price?.toFixed(2) || "49.99"}
+                </span>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-primary border border-primary/30 px-2 py-1 rounded">
+                  {book.language || "English"}
+                </span>
+              </div>
+              
+              {/* Actions */}
               <button 
                 onClick={(e) => SOCIAL_LINKS.handleInstagramBookPurchase(e, book.title)}
-                className="inline-flex items-center gap-2 font-body text-sm bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-semibold px-6 py-2.5 rounded hover:opacity-90 transition-opacity uppercase tracking-wider w-full justify-center"
+                className="inline-flex items-center gap-2 font-body text-sm bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white font-semibold px-6 py-2.5 rounded hover:opacity-90 transition-opacity uppercase tracking-wider w-full justify-center mt-auto"
               >
                 Purchase
               </button>

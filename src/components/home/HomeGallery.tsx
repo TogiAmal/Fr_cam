@@ -154,15 +154,15 @@ const HomeGallery = () => {
 
       {/* Navigation Buttons */}
       <button
-        onClick={() => scrollByAmount("left")}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-card/70 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex"
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollByAmount("left"); }}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-[50] w-12 h-12 bg-card/90 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex cursor-pointer shadow-lg"
       >
         <ChevronLeft size={24} />
       </button>
 
       <button
-        onClick={() => scrollByAmount("right")}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-card/70 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex"
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollByAmount("right"); }}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-[50] w-12 h-12 bg-card/90 hover:bg-primary hover:text-primary-foreground border border-border rounded-full flex items-center justify-center text-foreground transition-all duration-300 opacity-0 group-hover/section:opacity-100 hidden md:flex cursor-pointer shadow-lg"
       >
         <ChevronRight size={24} />
       </button>

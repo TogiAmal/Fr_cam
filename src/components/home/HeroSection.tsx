@@ -74,18 +74,20 @@ const HeroSection = () => {
 
   return (
     <section className="relative h-screen flex items-center justify-end overflow-hidden bg-black">
-      {/* Preload and crossfade images smoothly */}
-      {!isLoading && images.map((img, idx) => (
-          <div
-            key={img}
-            className="absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ease-in-out"
-            style={{
-              backgroundImage: `url('${img}')`,
-              opacity: idx === currentIndex ? 1 : 0,
-              zIndex: idx === currentIndex ? 1 : 0
-            }}
-          />
-      ))}
+      {/* Preload and crossfade images smoothly using AnimatePresence */}
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('${images[currentIndex]}')`,
+          }}
+        />
+      </AnimatePresence>
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/25 z-10" />
 
       {/* Right-aligned Welcome text container */}
