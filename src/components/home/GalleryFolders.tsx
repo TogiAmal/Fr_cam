@@ -20,32 +20,10 @@ const GalleryFolders = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    supabase.from("journeys").select("*").order("sort_order").then(({ data }) => {
+    supabase.from("journeys").select("*").order("sort_order", { ascending: true, nullsFirst: false }).then(({ data }) => {
       if (data && data.length > 0) {
         const filtered = data.filter((j: any) => j.title.toLowerCase() !== "home gallery");
-        
-        let sorted = [...filtered];
-        
-        sorted.sort((a, b) => {
-          const aTitle = a.title.toLowerCase();
-          const bTitle = b.title.toLowerCase();
-          
-          const aIsMasai = aTitle.includes("masai") || aTitle.includes("maasai") || aTitle.includes("mazai");
-          const bIsMasai = bTitle.includes("masai") || bTitle.includes("maasai") || bTitle.includes("mazai");
-          
-          const aIsKaziranga = aTitle.includes("kaziranga") || aTitle.includes("kazienga") || aTitle.includes("kazirng");
-          const bIsKaziranga = bTitle.includes("kaziranga") || bTitle.includes("kazienga") || bTitle.includes("kazirng");
-          
-          if (aIsMasai && !bIsMasai) return -1;
-          if (!aIsMasai && bIsMasai) return 1;
-          
-          if (aIsKaziranga && !bIsKaziranga) return -1;
-          if (!aIsKaziranga && bIsKaziranga) return 1;
-          
-          return 0;
-        });
-
-        const finalFolders = sorted.slice(0, 3);
+        const finalFolders = filtered.slice(0, 5); // Show top 5 folders decided by admin
         
         if (finalFolders.length > 0) {
           setFolders(finalFolders);

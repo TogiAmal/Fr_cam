@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, Plus, Pencil, Trash2, ImagePlus } from "lucide-react";
+import { ArrowLeft, Plus, Pencil, Trash2, ImagePlus, ArrowUp, ArrowDown } from "lucide-react";
 
 interface Journey {
   id: string;
@@ -47,7 +47,7 @@ const AdminJourneys = () => {
   }, [navigate]);
 
   const fetchJourneys = async () => {
-    const { data } = await supabase.from("journeys").select("*").order("sort_order");
+    const { data } = await supabase.from("journeys").select("*").order("sort_order", { ascending: true, nullsFirst: false }).order("created_at", { ascending: true });
     if (data) {
       setJourneys(data.filter((j: any) => j.title.toLowerCase() !== "home gallery"));
     }
@@ -69,7 +69,13 @@ const AdminJourneys = () => {
       let cover_image_url = form.cover_image_url;
       if (imageFile) cover_image_url = await uploadImage(imageFile);
 
-      const payload = { title: form.title, description: form.description || null, date: form.date || null, cover_image_url: cover_image_url || null };
+      const payload = { 
+          title: form.title, 
+          description: form.description || null, 
+          date: form.date || null, 
+          cover_image_url: cover_image_url || null,
+          sort_order: editing ? editing.sort_order : journeys.length
+      };
 
       if (editing) {
         await supabase.from("journeys").update(payload).eq("id", editing.id);
@@ -104,6 +110,30 @@ const AdminJourneys = () => {
   const clearImage = () => {
     setForm({ ...form, cover_image_url: "" });
     setImageFile(null);
+  };
+
+  const moveJourney = async (index: number, direction: 'up' | 'down') => {
+    if (direction === 'up' && index === 0) return;
+    if (direction === 'down' && index === journeys.length - 1) return;
+
+    const newJourneys = [...journeys];
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    // Swap in state
+    const temp = newJourneys[index];
+    newJourneys[index] = newJourneys[swapIndex];
+    newJourneys[swapIndex] = temp;
+    
+    setJourneys(newJourneys);
+
+    try {
+        await supabase.from("journeys").update({ sort_order: swapIndex }).eq("id", newJourneys[index].id);
+        await supabase.from("journeys").update({ sort_order: index }).eq("id", newJourneys[swapIndex].id);
+        toast({ title: "Priority updated" });
+    } catch (err: any) {
+        toast({ title: "Error updating priority", description: err.message, variant: "destructive" });
+        fetchJourneys();
+    }
   };
 
   return (
@@ -197,8 +227,16 @@ const AdminJourneys = () => {
         </form>
 
         <div className="space-y-3">
-          {journeys.map((j) => (
+          {journeys.map((j, index) => (
             <div key={j.id} className="flex items-center gap-4 bg-card border border-border rounded-lg p-4">
+              <div className="flex flex-col gap-1 pr-2 border-r border-border">
+                  <Button variant="ghost" size="icon" className="h-6 w-6" disabled={index === 0} onClick={() => moveJourney(index, 'up')}>
+                      <ArrowUp size={14} />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-6 w-6" disabled={index === journeys.length - 1} onClick={() => moveJourney(index, 'down')}>
+                      <ArrowDown size={14} />
+                  </Button>
+              </div>
               {j.cover_image_url && <img src={j.cover_image_url} alt={j.title} className="w-16 h-16 rounded object-cover flex-shrink-0" />}
               <div className="flex-1 min-w-0">
                 <h3 className="font-display font-semibold text-foreground truncate">{j.title}</h3>

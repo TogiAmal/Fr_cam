@@ -26,7 +26,21 @@ const HeroSection = () => {
           setDescription(sData.description || description);
         }
 
-        const { data: iData } = await supabase.from("hero_images").select("image_url").order("created_at", { ascending: true });
+        let { data: iData, error } = await supabase
+          .from("hero_images")
+          .select("image_url")
+          .order("sort_order", { ascending: true, nullsFirst: false })
+          .order("created_at", { ascending: true });
+
+        if (error) {
+          console.error("Sorting by sort_order failed, falling back to created_at:", error);
+          const fallback = await supabase
+            .from("hero_images")
+            .select("image_url")
+            .order("created_at", { ascending: true });
+          iData = fallback.data;
+        }
+
         if (iData && iData.length > 0) {
           const dbImages = iData.map(img => img.image_url);
           const filteredDbImages = dbImages.filter(url => url !== "/images/elephant.jpg" && url !== "/images/frcam_hero.jpg");

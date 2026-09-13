@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, Trash2, Upload, Loader2, Save } from "lucide-react";
+import { ArrowLeft, Trash2, Upload, Loader2, Save, ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from "lucide-react";
 
 interface HeroSettings {
     id?: string;
@@ -18,6 +18,7 @@ interface HeroSettings {
 interface HeroImage {
     id: string;
     image_url: string;
+    sort_order?: number | null;
 }
 
 const AdminHero = () => {
@@ -45,8 +46,22 @@ const AdminHero = () => {
         const { data: sData } = await supabase.from("hero_settings").select("*").single();
         if (sData) setSettings(sData);
 
-        // Fetch images
-        const { data: iData } = await supabase.from("hero_images").select("*").order("created_at", { ascending: true });
+        // Fetch images with sort_order fallback
+        let { data: iData, error } = await supabase
+            .from("hero_images")
+            .select("*")
+            .order("sort_order", { ascending: true, nullsFirst: false })
+            .order("created_at", { ascending: true });
+
+        if (error) {
+            console.error("Sorting by sort_order failed, falling back to created_at:", error);
+            const fallback = await supabase
+                .from("hero_images")
+                .select("*")
+                .order("created_at", { ascending: true });
+            iData = fallback.data;
+        }
+
         if (iData) setImages(iData);
         setLoading(false);
     };
@@ -80,8 +95,21 @@ const AdminHero = () => {
 
             const { data } = supabase.storage.from("gallery").getPublicUrl(path);
 
-            const { error: insertError } = await supabase.from("hero_images").insert({ image_url: data.publicUrl });
-            if (insertError) throw insertError;
+            const { error: insertError } = await supabase.from("hero_images").insert({ 
+                image_url: data.publicUrl,
+                sort_order: images.length
+            } as any); // cast to any to handle if schema doesn't match yet
+            if (insertError) {
+                // If it fails because sort_order column doesn't exist, try without it
+                if (insertError.message.includes("sort_order")) {
+                     const { error: fallbackInsertError } = await supabase.from("hero_images").insert({ 
+                        image_url: data.publicUrl 
+                    } as any);
+                    if (fallbackInsertError) throw fallbackInsertError;
+                } else {
+                    throw insertError;
+                }
+            }
 
             toast({ title: "Image uploaded successfully" });
             setFile(null);
@@ -97,6 +125,38 @@ const AdminHero = () => {
         await supabase.from("hero_images").delete().eq("id", id);
         toast({ title: "Image removed" });
         fetchData();
+    };
+
+    const moveImage = async (index: number, direction: 'left' | 'right') => {
+        if (direction === 'left' && index === 0) return;
+        if (direction === 'right' && index === images.length - 1) return;
+
+        const newImages = [...images];
+        const swapIndex = direction === 'left' ? index - 1 : index + 1;
+        
+        // Swap in state
+        const temp = newImages[index];
+        newImages[index] = newImages[swapIndex];
+        newImages[swapIndex] = temp;
+        
+        setImages(newImages);
+
+        try {
+            // Update in DB - safely ignoring errors if sort_order doesn't exist
+            const { error: err1 } = await supabase.from("hero_images").update({ sort_order: swapIndex } as any).eq("id", newImages[index].id);
+            const { error: err2 } = await supabase.from("hero_images").update({ sort_order: index } as any).eq("id", newImages[swapIndex].id);
+            
+            if (err1 || err2) {
+                console.error("Error updating priority (column might be missing):", err1 || err2);
+                toast({ title: "Error updating priority", description: "You might need to create a 'sort_order' column in Supabase.", variant: "destructive" });
+                fetchData(); // Revert on error
+            } else {
+                toast({ title: "Priority updated" });
+            }
+        } catch (err) {
+             console.error("Error:", err);
+             fetchData();
+        }
     };
 
     return (
@@ -142,10 +202,18 @@ const AdminHero = () => {
                     </form>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {images.map((img) => (
+                        {images.map((img, index) => (
                             <div key={img.id} className="relative group rounded-lg overflow-hidden border border-border aspect-video bg-muted">
                                 <img src={img.image_url} alt="Hero Slider" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4">
+                                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4 gap-2">
+                                    <div className="flex gap-2">
+                                        <Button variant="secondary" size="icon" disabled={index === 0} onClick={() => moveImage(index, 'left')}>
+                                            <ArrowLeftIcon size={16} />
+                                        </Button>
+                                        <Button variant="secondary" size="icon" disabled={index === images.length - 1} onClick={() => moveImage(index, 'right')}>
+                                            <ArrowRightIcon size={16} />
+                                        </Button>
+                                    </div>
                                     <Button variant="destructive" size="sm" onClick={() => deleteImage(img.id)}>
                                         <Trash2 size={14} className="mr-2" /> Delete
                                     </Button>
@@ -161,3 +229,4 @@ const AdminHero = () => {
 };
 
 export default AdminHero;
+

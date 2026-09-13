@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, Trash2, Upload, Loader2 } from "lucide-react";
+import { ArrowLeft, Trash2, Upload, Loader2, ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from "lucide-react";
 
 interface Photo {
   id: string;
   image_url: string;
   caption: string | null;
+  sort_order?: number | null;
 }
 
 const AdminHomeGallery = () => {
@@ -32,7 +33,6 @@ const AdminHomeGallery = () => {
   const resolveHomeGalleryJourney = async () => {
     setResolvingJourney(true);
     try {
-      // 1. Check if "Home Gallery" journey already exists
       let { data: journey, error } = await supabase
         .from("journeys")
         .select("*")
@@ -41,7 +41,6 @@ const AdminHomeGallery = () => {
 
       if (error) throw error;
 
-      // 2. If it does not exist, create it
       if (!journey) {
         const { data: newJourney, error: insertError } = await supabase
           .from("journeys")
@@ -70,15 +69,25 @@ const AdminHomeGallery = () => {
   };
 
   const fetchPhotos = async (jId: string) => {
-    const { data: pData, error } = await supabase
+    let { data: pData, error } = await supabase
       .from("journey_photos")
       .select("*")
       .eq("journey_id", jId)
-      .order("created_at", { ascending: false });
+      .order("sort_order", { ascending: true, nullsFirst: false })
+      .order("created_at", { ascending: true }); // Changed to ascending so it matches frontend
 
     if (error) {
-      toast({ title: "Error fetching photos", description: error.message, variant: "destructive" });
-    } else if (pData) {
+       console.error("Sorting by sort_order failed:", error);
+       // Fallback
+       const fallback = await supabase
+          .from("journey_photos")
+          .select("*")
+          .eq("journey_id", jId)
+          .order("created_at", { ascending: true });
+       pData = fallback.data;
+    }
+
+    if (pData) {
       setPhotos(pData);
     }
   };
@@ -92,20 +101,30 @@ const AdminHomeGallery = () => {
       const ext = file.name.split(".").pop();
       const path = `journey_photos/home_gallery/${Date.now()}.${ext}`;
       
-      // Upload file to bucket
       const { error: uploadError } = await supabase.storage.from("gallery").upload(path, file);
       if (uploadError) throw uploadError;
 
-      // Get public URL
       const { data } = supabase.storage.from("gallery").getPublicUrl(path);
 
-      // Insert record
       const { error: insertError } = await supabase.from("journey_photos").insert({
         journey_id: journeyId,
         image_url: data.publicUrl,
-        caption: caption || null
-      });
-      if (insertError) throw insertError;
+        caption: caption || null,
+        sort_order: photos.length
+      } as any);
+      
+      if (insertError) {
+           if (insertError.message.includes("sort_order")) {
+                 const { error: fallbackInsertError } = await supabase.from("journey_photos").insert({ 
+                    journey_id: journeyId,
+                    image_url: data.publicUrl,
+                    caption: caption || null
+                } as any);
+                if (fallbackInsertError) throw fallbackInsertError;
+            } else {
+                throw insertError;
+            }
+      }
 
       toast({ title: "Photo added successfully" });
       setFile(null);
@@ -123,6 +142,38 @@ const AdminHomeGallery = () => {
     toast({ title: "Photo removed" });
     if (journeyId) fetchPhotos(journeyId);
   };
+
+  const movePhoto = async (index: number, direction: 'left' | 'right') => {
+        if (direction === 'left' && index === 0) return;
+        if (direction === 'right' && index === photos.length - 1) return;
+
+        const newPhotos = [...photos];
+        const swapIndex = direction === 'left' ? index - 1 : index + 1;
+        
+        // Swap in state
+        const temp = newPhotos[index];
+        newPhotos[index] = newPhotos[swapIndex];
+        newPhotos[swapIndex] = temp;
+        
+        setPhotos(newPhotos);
+
+        try {
+            // Update in DB safely ignoring errors if sort_order missing
+            const { error: err1 } = await supabase.from("journey_photos").update({ sort_order: swapIndex } as any).eq("id", newPhotos[index].id);
+            const { error: err2 } = await supabase.from("journey_photos").update({ sort_order: index } as any).eq("id", newPhotos[swapIndex].id);
+            
+            if (err1 || err2) {
+                console.error("Error updating priority:", err1 || err2);
+                toast({ title: "Error updating priority", description: "You might need to create a 'sort_order' column for journey_photos in Supabase.", variant: "destructive" });
+                if (journeyId) fetchPhotos(journeyId);
+            } else {
+                toast({ title: "Priority updated" });
+            }
+        } catch (err) {
+             console.error("Error:", err);
+             if (journeyId) fetchPhotos(journeyId);
+        }
+    };
 
   if (resolvingJourney) {
     return (
@@ -158,10 +209,18 @@ const AdminHomeGallery = () => {
         </form>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {photos.map((p) => (
+          {photos.map((p, index) => (
             <div key={p.id} className="relative group rounded-lg overflow-hidden border border-border aspect-square bg-muted">
               <img src={p.image_url} alt="Home gallery item" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4">
+              <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4 gap-2">
+                <div className="flex gap-2">
+                    <Button variant="secondary" size="icon" disabled={index === 0} onClick={() => movePhoto(index, 'left')}>
+                        <ArrowLeftIcon size={16} />
+                    </Button>
+                    <Button variant="secondary" size="icon" disabled={index === photos.length - 1} onClick={() => movePhoto(index, 'right')}>
+                        <ArrowRightIcon size={16} />
+                    </Button>
+                </div>
                 <Button variant="destructive" size="sm" onClick={() => deletePhoto(p.id)}>
                   <Trash2 size={14} className="mr-2" /> Delete
                 </Button>

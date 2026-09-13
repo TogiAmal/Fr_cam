@@ -31,11 +31,22 @@ const HomeGallery = () => {
 
         if (journeyData) {
           // Fetch photos belonging to this journey
-          const { data: photosData } = await supabase
+          let { data: photosData, error } = await supabase
             .from("journey_photos")
             .select("*")
             .eq("journey_id", journeyData.id)
-            .order("sort_order", { ascending: true });
+            .order("sort_order", { ascending: true, nullsFirst: false })
+            .order("created_at", { ascending: true });
+          
+          if (error) {
+             console.error("Sort by sort_order failed, falling back to created_at");
+             const fallback = await supabase
+              .from("journey_photos")
+              .select("*")
+              .eq("journey_id", journeyData.id)
+              .order("created_at", { ascending: true });
+             photosData = fallback.data;
+          }
 
           if (photosData && photosData.length > 0) {
             setPhotos(photosData);
