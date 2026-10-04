@@ -56,7 +56,7 @@ const Navbar = () => {
             to="/"
             className={`${textClass} hover:opacity-80 transition-colors flex items-center gap-3`}
           >
-            <img src="/images/logo.png" alt="Logo" className={`w-10 h-10 rounded-full border ${logoBorderClass} object-cover`} />
+            <img src="/images/logo.png" alt="frcam Logo" className="h-10 w-auto object-contain" />
             <span className="font-serif italic text-2xl lowercase tracking-wider font-normal">fr_cam</span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
